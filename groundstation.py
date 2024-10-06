@@ -1,12 +1,30 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap #QPixmap is the library used for importing/displaying images in the UI
 import sys
+from PyQt5.QtWidgets import * #TODO: Determine performance impact
+from PyQt5.QtGui import *
+
+#QPixmap is the library used for importing/displaying images in the UI
 #This is the tutorial that I am following for loading the image:
 # https://www.geeksforgeeks.org/pyqt5-how-to-add-image-in-window/
-app = QApplication([])
-window = QWidget()
-xboxControllerMapImage = QPixmap('Xbox Controller Map.xlsx - EXPERIMENTAL_Pilot Controller conv 1.png')
-label = QLabel('Rover Team 3 Base Station')
-label.setPixmap(xboxControllerMapImage)
-label.show()
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow,self).__init__()
+
+        self.setWindowTitle("Rover Team 3 Base Station")
+
+
+
+app = QApplication(sys.argv)
+
+window = MainWindow()
+window.show()
+
+class displayImage(QWidget):
+    def __init__(self):
+        super(MainWindow,self).__init__()
+
+    
+
+
+
 app.exec()
