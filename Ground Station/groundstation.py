@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import * #TODO: Determine performance impact
 from PyQt5.QtGui import *
-
+app = QApplication([])
+app.setStyle('Fusion')
 #QPixmap is the library used for importing/displaying images in the UI
 #This is the tutorial that I am following for loading the image:
 # https://www.geeksforgeeks.org/pyqt5-how-to-add-image-in-window/
@@ -11,11 +12,11 @@ class MainWindow(QMainWindow):
         super(MainWindow,self).__init__()
 
         self.setWindowTitle("Rover Team 3 Base Station")
-        layout1 = QHBoxLayout()
-        layout2 = QVBoxLayout()
-        layout3 = QVBoxLayout()
-
         
+     
+
+
+
 
 
 
@@ -33,3 +34,6 @@ class displayImage(QWidget):
 
 
 app.exec()
+window = MainWindow()
+window.show()
+
