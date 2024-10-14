@@ -11,6 +11,11 @@ class MainWindow(QMainWindow):
         super(MainWindow,self).__init__()
 
         self.setWindowTitle("Rover Team 3 Base Station")
+        layout1 = QHBoxLayout()
+        layout2 = QVBoxLayout()
+        layout3 = QVBoxLayout()
+
+        
 
 
 
