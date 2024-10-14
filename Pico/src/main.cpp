@@ -1,12 +1,12 @@
 #include <Arduino.h>
 
 // These are inputs fro the BMP388 (Environment sensor) and BNO (orientation/IMU)
-//https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code
-//https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
-//It is necessary to add the libraries to Platform IO in order to be able to build correctly
+// https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code
+// https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
+// It is necessary to add the libraries to Platform IO in order to be able to build correctly
 #include <Wire.h>
 #include <SPI.h>
-#include <Adafruit_Sensor.h> 
+#include <Adafruit_Sensor.h>
 #include "Adafruit_BMP3XX.h"
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
@@ -21,36 +21,48 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 Adafruit_BMP3XX bmp;
 
+unsigned long IMUCheckTimeElapsed = 0UL;
+unsigned long IMUUpdateInterval = 100UL;
 
-
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
-    Serial.begin(9600); //Begin broadcasting over serial on a baud rate of 9600
-    while(!Serial); //Execute while not running in serial mode
 
+  Serial.begin(9600); // Begin broadcasting over serial on a baud rate of 9600
+  while (!Serial)
+    ; // Execute while not running in serial mode
 
   // Set up pins for digital input and output- for help refer to the "Resources" folder for the schematic
-  // Using pins 1-6 for servo output. Pin 3 is GROUND- Do not assign something to this
+  // Using pins 1-6 for servo output.
+  //! Pin 3 is GROUND- Do not assign something to this
 
-  pinMode(1, OUTPUT); //High Torque Servo Miuzei
-  pinMode(2, OUTPUT); //Grab — MGT Servo
-  pinMode(4,OUTPUT); // Rotation MGT-Servo
-  pinMode(5,OUTPUT); //PWMA Driver - Is this an input?
-  pinMode(6,OUTPUT); //PWMB Driver- Are these actually inputs- difficult to tell from the diagram
+  pinMode(1, OUTPUT); // High Torque Servo Miuzei
+  pinMode(2, OUTPUT); // Grab — MGT Servo
+  pinMode(4, OUTPUT); // Rotation MGT-Servo
+  pinMode(5, OUTPUT); // PWMA Driver - Is this an input?
+  pinMode(6, OUTPUT); // PWMB Driver- Are these actually inputs- difficult to tell from the diagram
 
-  pinMode(21, INPUT); //SDA-BMP388- SDA = serial input to processor- confirm
-  pinMode(22, OUTPUT); //SCL-BMP388
+  pinMode(21, INPUT);  // SDA-BMP388- SDA = serial input to processor- confirm
+  pinMode(22, OUTPUT); // SCL-BMP388
 
-  pinMode(25, OUTPUT); //SCL-BNO055
-  pinMode(26, INPUT); //SDA-BNO055- SDA = serial input to processor- confirm
+  pinMode(25, OUTPUT); // SCL-BNO055
+  pinMode(26, INPUT);  // SDA-BNO055- SDA = serial input to processor- confirm
 
-  pinMode(40, OUTPUT); //Output to Libre
+  pinMode(40, OUTPUT); // Output to Libre
 
-  //Check that we are receiving input from the BMP 388, print error message if not
+  // Check that we are receiving input from the BMP 388, print error message if not
 
-  if(! bmp.begin_SPI(BMP_CS, BMP_SCK, BMP_MISO, BMP_MOSI)){
+  if (!bmp.begin_SPI(BMP_CS, BMP_SCK, BMP_MISO, BMP_MOSI))
+  {
     Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
-    while (1); // Throw
+    while (1)
+      ; // Throw
+  }
+  if (!bno.begin())
+  {
+    Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
+    while (1)
+      ;
   }
 
   // TODO: Tune this - currently based off of the example code: https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
@@ -60,11 +72,36 @@ void setup() {
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 
-
+  bno.setExtCrystalUse(true); //? What is this? Something to do with accuracy of measurements?
+  // TODO: Take a look at the crystal
 }
 
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
+
+  // ! Temporary IMU Output for testing purposes
+  // TODO: This is just temporary for testing- able to display values from the IMU, but are not truly readable and able to be interpreted.
+  // TODO: Going with 2 decimal places at this time. Determine if we need to change this
+
+  unsigned long currentIMUTime = millis(); // Get the current time in milliseconds
+
+  if (currentIMUTime - IMUCheckTimeElapsed >= IMUUpdateInterval)
+  {
+    sensors_event_t getIMUEvent;
+    bno.getEvent(&getIMUEvent);
+    double updateIMUDelay = 200.00; // TODO: Tune this or convert to a int if needed- don't think that we will truly need a double for this, but might
+    Serial.print("Current time between IMU Update:");
+    Serial.print("X axis: ");
+    Serial.print(getIMUEvent.orientation.x, 2);
+    Serial.print("\tY axis: ");
+    Serial.print(getIMUEvent.orientation.y, 2);
+    Serial.print("\tZ Axis: ");
+    Serial.print(getIMUEvent.orientation.x, 2);
+    Serial.print("=============================");
+
+    IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
+  }
 }
 
 // put function definitions here:
