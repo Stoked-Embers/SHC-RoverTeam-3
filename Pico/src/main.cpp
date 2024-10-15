@@ -17,12 +17,15 @@
 #define BMP_CS 10
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
-#define SEALEVELPRESSURE_HPA (1013.25)
+#define SEALEVELPRESSURE_HPA (1013.25) // TODO: Does this value need to be tuned
 
 Adafruit_BMP3XX bmp;
 
 unsigned long IMUCheckTimeElapsed = 0UL;
 unsigned long IMUUpdateInterval = 100UL;
+
+unsigned long EnvCheckTimeElapsed = 0UL;
+unsigned long EnvUpdateInterval = 100UL;
 
 void setup()
 {
@@ -92,6 +95,7 @@ void loop()
     bno.getEvent(&getIMUEvent);
     double updateIMUDelay = 200.00; // TODO: Tune this or convert to a int if needed- don't think that we will truly need a double for this, but might
     Serial.print("Current time between IMU Update:");
+    Serial.print(IMUUpdateInterval);
     Serial.print("X axis: ");
     Serial.print(getIMUEvent.orientation.x, 2);
     Serial.print("\tY axis: ");
@@ -101,6 +105,28 @@ void loop()
     Serial.print("=============================");
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
+  }
+
+  // ! Test Environmental Sensor code for testing purposes
+  // TODO: This is just going to output the value of the sensors to the terminal, or throw an error when the sensor is not detected
+
+  if (!bmp.performReading())
+  {
+    Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
+    return;
+  }
+
+  unsigned long currentEnvTime = millis(); // Get the current time in milliseconds- could this possibly be merged into the main function
+  if (currentEnvTime - EnvCheckTimeElapsed >= EnvUpdateInterval)
+  {
+    Serial.print("Current time between Environmental sensor update");
+    Serial.print(bmp.temperature); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
+    Serial.print(" Celsius");
+    Serial.print("Pressure");
+    Serial.print(bmp.pressure / 100); // TODO: This is in HPA. Do we want that?
+    Serial.print("Altitude:");
+    Serial.print(bmp.readAltitude(SEALEVELPRESSURE_HPA)); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
+    Serial.print(" meters");
   }
 }
 
