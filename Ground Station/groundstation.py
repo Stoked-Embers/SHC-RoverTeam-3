@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import * #TODO: Determine performance impact
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import * #TODO: Change to imported methods when complete
+from PyQt5.QtGui import * #TODO: Change to imported methods when complete
 app = QApplication([])
 app.setStyle('Fusion')
 #QPixmap is the library used for importing/displaying images in the UI
