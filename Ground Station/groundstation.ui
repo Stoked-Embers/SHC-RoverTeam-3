@@ -80,6 +80,9 @@
        <height>40</height>
       </rect>
      </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
     </widget>
     <widget class="QLabel" name="globalMotorSpeedLabel">
      <property name="geometry">
@@ -136,6 +139,9 @@
        <height>40</height>
       </rect>
      </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
     </widget>
     <widget class="QSpinBox" name="midSpinBox">
      <property name="geometry">
@@ -146,6 +152,9 @@
        <height>40</height>
       </rect>
      </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
     </widget>
     <widget class="QSpinBox" name="endSpinBox">
      <property name="geometry">
@@ -155,6 +164,9 @@
        <width>70</width>
        <height>40</height>
       </rect>
+     </property>
+     <property name="maximum">
+      <number>100</number>
      </property>
     </widget>
     <widget class="QLabel" name="baseLabel">
@@ -199,22 +211,30 @@
     <widget class="QLabel" name="armDiagram">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>-40</y>
+       <x>100</x>
+       <y>-60</y>
        <width>311</width>
-       <height>421</height>
+       <height>441</height>
       </rect>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../../../Downloads/SHC-RoverTeam-3-main/SHC-RoverTeam-3-main/Ground Station/Arm Diagram for Ground station V1.png</pixmap>
+      <pixmap>images/armdiagram.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
      </property>
     </widget>
+    <zorder>jointBackground</zorder>
+    <zorder>baseSpinBox</zorder>
+    <zorder>endSpinBox</zorder>
+    <zorder>baseLabel</zorder>
+    <zorder>endLabel</zorder>
+    <zorder>armDiagram</zorder>
+    <zorder>midSpinBox</zorder>
+    <zorder>midLabel</zorder>
    </widget>
    <widget class="QFrame" name="controlsFrame">
     <property name="geometry">
@@ -257,7 +277,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../../../Downloads/SHC-RoverTeam-3-main/SHC-RoverTeam-3-main/Ground Station/xboxmap.png</pixmap>
+      <pixmap>images/xboxmap.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -308,7 +328,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QGraphicsView" name="graphicsView_1">
+    <widget class="QGraphicsView" name="graphicsView">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -353,7 +373,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QGraphicsView" name="graphicsView_2">
+    <widget class="QGraphicsView" name="data2Background">
      <property name="geometry">
       <rect>
        <x>0</x>
