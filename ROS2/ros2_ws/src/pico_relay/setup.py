@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "relay = pico_relay.relay_node:main"
+            "relay = pico_relay.relay_node:main",
+            'talker = py_pubsub.publisher_member_function:main',
         ],
     },
 )
