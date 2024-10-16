@@ -328,7 +328,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QGraphicsView" name="graphicsView">
+    <widget class="QGraphicsView" name="data1Background">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -429,9 +429,6 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="Controller Diagram Image.qrc"/>
-  <include location="Arm Image.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

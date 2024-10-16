@@ -123,10 +123,10 @@ class Ui_MainWindow(object):
         self.data1Frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.data1Frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.data1Frame.setObjectName("data1Frame")
-        self.graphicsView = QtWidgets.QGraphicsView(self.data1Frame)
-        self.graphicsView.setGeometry(QtCore.QRect(0, 0, 250, 170))
-        self.graphicsView.setStyleSheet("background-color: rgb(168, 168, 168);")
-        self.graphicsView.setObjectName("graphicsView")
+        self.data1Background = QtWidgets.QGraphicsView(self.data1Frame)
+        self.data1Background.setGeometry(QtCore.QRect(0, 0, 250, 170))
+        self.data1Background.setStyleSheet("background-color: rgb(168, 168, 168);")
+        self.data1Background.setObjectName("data1Background")
         self.data1Label = QtWidgets.QLabel(self.data1Frame)
         self.data1Label.setGeometry(QtCore.QRect(10, 10, 31, 16))
         self.data1Label.setStyleSheet("color: rgb(255, 255, 255)")
@@ -170,7 +170,6 @@ class Ui_MainWindow(object):
         self.endLabel.setText(_translate("MainWindow", "End"))
         self.data1Label.setText(_translate("MainWindow", "Data 1"))
         self.data2Label.setText(_translate("MainWindow", "Data 2"))
-
 
 
 if __name__ == "__main__":
