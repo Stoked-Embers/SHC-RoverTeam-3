@@ -277,7 +277,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../../../Downloads/SHC-RoverTeam-3-main/SHC-RoverTeam-3-main/Ground Station/xboxmap.png</pixmap>
+      <pixmap>images/xboxmap.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -423,7 +423,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
