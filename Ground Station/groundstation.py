@@ -44,7 +44,7 @@ class AccelerationGraph(FigureCanvas):
 
         #clear plot and plot new data
         self.axes.clear()
-        self.axes.plot(self.x_data, self.y_data, label="Accelration (m/s^2)")
+        self.axes.plot(self.x_data, self.y_data, label="Acceleration (m/s^2)")
         self.axes.set_xlabel("Time (s)")
         self.axes.set_ylabel("Acceleration (m/s^2)")
         self.axes.set_title("Acceleration Data")
