@@ -10,6 +10,7 @@
 import sys
 import time
 import random
+import diagrams_rc
 from enum import Enum
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
@@ -223,7 +224,7 @@ class Ui_MainWindow(object):
         self.armDiagram.setMaximumSize(QtCore.QSize(1667467, 1667467))
         self.armDiagram.setText("")
         self.armDiagram.setTextFormat(QtCore.Qt.AutoText)
-        self.armDiagram.setPixmap(QtGui.QPixmap("images/armdiagram.png"))
+        self.armDiagram.setPixmap(QtGui.QPixmap(":/armdiagram.png"))
         self.armDiagram.setScaledContents(True)
         self.armDiagram.setAlignment(QtCore.Qt.AlignCenter)
         self.armDiagram.setObjectName("armDiagram")
@@ -253,7 +254,7 @@ class Ui_MainWindow(object):
         self.controlsDiagram.setMinimumSize(QtCore.QSize(512, 143))
         self.controlsDiagram.setText("")
         self.controlsDiagram.setTextFormat(QtCore.Qt.PlainText)
-        self.controlsDiagram.setPixmap(QtGui.QPixmap("images/xboxmap.png"))
+        self.controlsDiagram.setPixmap(QtGui.QPixmap(":/xboxmap.png"))
         self.controlsDiagram.setScaledContents(True)
         self.controlsDiagram.setAlignment(QtCore.Qt.AlignCenter)
         self.controlsDiagram.setObjectName("controlsDiagram")
