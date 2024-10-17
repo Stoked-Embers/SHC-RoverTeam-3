@@ -380,6 +380,8 @@
         </item>
        </layout>
       </widget>
+      <zorder>jointBackground</zorder>
+      <zorder>layoutWidget</zorder>
      </widget>
     </item>
     <item row="2" column="0">
@@ -569,7 +571,7 @@
      <x>0</x>
      <y>0</y>
      <width>1023</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
