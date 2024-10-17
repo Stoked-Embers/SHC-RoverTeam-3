@@ -485,7 +485,7 @@ background-color: rgb(255, 255, 255);</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0" alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="temperatureLabel">
+          <widget class="QLabel" name="imuLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -501,12 +501,12 @@ background-color: rgb(255, 255, 255);</string>
             <string notr="true">color: rgb(255, 255, 255)</string>
            </property>
            <property name="text">
-            <string>Live Temperature Feed</string>
+            <string>IMU Data Feed</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QTextEdit" name="temperatureDisplay">
+          <widget class="QTextEdit" name="imuDisplay">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
@@ -553,7 +553,7 @@ p, li { white-space: pre-wrap; }
         </property>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0" alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="pressureLabel">
+          <widget class="QLabel" name="temperatureLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -569,12 +569,12 @@ p, li { white-space: pre-wrap; }
             <string notr="true">color: rgb(255, 255, 255)</string>
            </property>
            <property name="text">
-            <string>Live Pressure Feed</string>
+            <string>Temperature Data Feed</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QTextEdit" name="pressureDisplay">
+          <widget class="QTextEdit" name="temperatureDisplay">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
@@ -609,6 +609,8 @@ p, li { white-space: pre-wrap; }
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="images/diagrams.qrc"/>
+ </resources>
  <connections/>
 </ui>
