@@ -119,6 +119,8 @@ class Ui_MainWindow(object):
         self.globalMotorSpeedSpinBox.setMinimumSize(QtCore.QSize(150, 0))
         self.globalMotorSpeedSpinBox.setStyleSheet("color: rgb(0, 0, 0);\n"
 "background-color: rgb(255, 255, 255);")
+        self.globalMotorSpeedSpinBox.setSuffix("")
+        self.globalMotorSpeedSpinBox.setMinimum(-1)
         self.globalMotorSpeedSpinBox.setMaximum(100)
         self.globalMotorSpeedSpinBox.setObjectName("globalMotorSpeedSpinBox")
         self.motorControlsLayout.addWidget(self.globalMotorSpeedSpinBox, 2, 0, 1, 1, QtCore.Qt.AlignHCenter)
@@ -380,6 +382,14 @@ class Ui_MainWindow(object):
         self.data1Frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.data2Frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
+        #checks if the global speed box has changed and if it has updates the other joints to reflect
+        self.globalMotorSpeedSpinBox.valueChanged.connect(self.update_joint_speeds)
+        
+        #checks if any one of the three individual joint speeds has changed and if so clears the global speed box to reflect
+        self.baseSpinBox.valueChanged.connect(self.clear_global_speed)
+        self.midSpinBox.valueChanged.connect(self.clear_global_speed)
+        self.endSpinBox.valueChanged.connect(self.clear_global_speed)
+
         # Maximize the window to ensure full scaling on start
         MainWindow.showMaximized()
         
@@ -438,6 +448,30 @@ class Ui_MainWindow(object):
     def get_end_speed(self):
         end_speed = self.endSpinBox.value()
         return end_speed
+    
+
+    def update_joint_speeds(self):
+        global_speed = self.globalMotorSpeedSpinBox.value()
+
+        #prevent triggering self.clear_global_speed
+        self.baseSpinBox.blockSignals(True)
+        self.midSpinBox.blockSignals(True)
+        self.endSpinBox.blockSignals(True)
+
+        self.baseSpinBox.setValue(global_speed)
+        self.midSpinBox.setValue(global_speed)
+        self.endSpinBox.setValue(global_speed)
+
+        #re-enable signals for spinboxes
+        self.baseSpinBox.blockSignals(False)
+        self.midSpinBox.blockSignals(False)
+        self.endSpinBox.blockSignals(False)
+
+    def clear_global_speed(self):
+        self.globalMotorSpeedSpinBox.blockSignals(True)
+        self.globalMotorSpeedSpinBox.setValue(-1)
+        self.globalMotorSpeedSpinBox.blockSignals(False)
+
 
     # Enum class for joints on the arm
     class Joint(Enum):

@@ -161,6 +161,12 @@
             <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);</string>
            </property>
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="minimum">
+            <number>-1</number>
+           </property>
            <property name="maximum">
             <number>100</number>
            </property>
