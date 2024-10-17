@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1023</width>
-    <height>792</height>
+    <width>1230</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -220,7 +220,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <property name="verticalSpacing">
+       <property name="spacing">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -474,12 +474,12 @@
           <string notr="true">background-color: rgb(168, 168, 168);</string>
          </property>
         </widget>
-        <widget class="QLabel" name="data1Label">
+        <widget class="QLabel" name="temperatureLabel">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>100</x>
            <y>10</y>
-           <width>31</width>
+           <width>61</width>
            <height>16</height>
           </rect>
          </property>
@@ -498,9 +498,22 @@
           <string notr="true">color: rgb(255, 255, 255)</string>
          </property>
          <property name="text">
-          <string>Data 1</string>
+          <string>Temperature</string>
          </property>
         </widget>
+        <widget class="QLCDNumber" name="temperatureLcd">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>60</y>
+           <width>151</width>
+           <height>81</height>
+          </rect>
+         </property>
+        </widget>
+        <zorder>data1Background</zorder>
+        <zorder>temperatureLabel</zorder>
+        <zorder>temperatureLcd</zorder>
        </widget>
       </item>
       <item>
@@ -530,13 +543,13 @@
           <string notr="true">background-color: rgb(168, 168, 168);</string>
          </property>
         </widget>
-        <widget class="QLabel" name="data2Label">
+        <widget class="QLabel" name="pressureLabel">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>110</x>
            <y>10</y>
-           <width>32</width>
-           <height>13</height>
+           <width>41</width>
+           <height>16</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -554,7 +567,17 @@
           <string notr="true">color: rgb(255, 255, 255)</string>
          </property>
          <property name="text">
-          <string>Data 2</string>
+          <string>Pressure</string>
+         </property>
+        </widget>
+        <widget class="QLCDNumber" name="pressureLCD">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>60</y>
+           <width>151</width>
+           <height>81</height>
+          </rect>
          </property>
         </widget>
        </widget>
@@ -568,7 +591,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1023</width>
+     <width>1230</width>
      <height>21</height>
     </rect>
    </property>
