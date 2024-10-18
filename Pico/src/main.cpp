@@ -1,11 +1,17 @@
 #include <Arduino.h>
 
-// These are inputs fro the BMP388 (Environment sensor) and BNO (orientation/IMU)
-// https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code
-// https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
-// It is necessary to add the libraries to Platform IO in order to be able to build correctly
+/**These are inputs fro the BMP388 (Environment sensor) and BNO (orientation/IMU)
+ *  https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code
+ * https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
+ * It is necessary to add the libraries to Platform IO in order to be able to build correctly
+ *
+ *
+ *
+ * */
+
 #include <Wire.h>
 #include <SPI.h>
+#include <SD.h>
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BMP3XX.h"
 #include <Adafruit_BNO055.h>
@@ -27,6 +33,17 @@ unsigned long IMUUpdateInterval = 100UL;
 unsigned long EnvCheckTimeElapsed = 0UL;
 unsigned long EnvUpdateInterval = 100UL;
 
+// Declare vars for environmental sensor in preparation of writing to file
+double envTemp = 0.0;
+double envPressure = 0.0;
+double envAltitude = 0.0;
+
+// Declare vars for IMU sensor in preperation for writing values to a file
+double posX = 0.0;
+double posY = 0.0;
+double posZ = 0.0;
+
+File sensorDataFile;
 void setup()
 {
   // put your setup code here, to run once:
@@ -45,6 +62,9 @@ void setup()
   pinMode(5, OUTPUT); // PWMA Driver - Is this an input?
   pinMode(6, OUTPUT); // PWMB Driver- Are these actually inputs- difficult to tell from the diagram
 
+  pinMode(11, INPUT); // These are the GPIO pins - 11 and 12
+  pinMode(12, OUTPUT);
+
   pinMode(21, INPUT);  // SDA-BMP388- SDA = serial input to processor- confirm
   pinMode(22, OUTPUT); // SCL-BMP388
 
@@ -53,8 +73,20 @@ void setup()
 
   pinMode(40, OUTPUT); // Output to Libre
 
-  // Check that we are receiving input from the BMP 388, print error message if not
+  // Set pin on the pico which the SD card is on, so we can save a file
+  const int sdOutputPin = 11;
 
+  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+  if(sensorDataFile){
+    Serial.println("Checking SD card...");
+    sensorDataFile.println("SD card test");
+    sensorDataFile.close();
+    Serial.println("SD card check passed");
+  } else{
+    Serial.println("SD card check failed. Check pin initialization and wiring.");
+  }
+
+  // Check that we are receiving input from the BMP 388, print error message if not
   if (!bmp.begin_SPI(BMP_CS, BMP_SCK, BMP_MISO, BMP_MOSI))
   {
     Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
@@ -66,6 +98,12 @@ void setup()
     Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
     while (1)
       ;
+  }
+  // Throw if the SD card cant be written to
+  if (!SD.begin(sdOutputPin))
+  {
+    Serial.println("SD card initialization failed. Please check the wiring and ensure that pins are initialized correctly in software.");
+    return;
   }
 
   // TODO: Tune this - currently based off of the example code: https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
@@ -82,6 +120,8 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
+  // Set up SD card for writing
+  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
 
   // ! Temporary IMU Output for testing purposes
   // TODO: This is just temporary for testing- able to display values from the IMU, but are not truly readable and able to be interpreted.
@@ -94,14 +134,30 @@ void loop()
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
     double updateIMUDelay = 200.00; // TODO: Tune this or convert to a int if needed- don't think that we will truly need a double for this, but might
+
+    posX = (getIMUEvent.orientation.x, 2);
+    posY = (getIMUEvent.orientation.y, 2);
+    posZ = (getIMUEvent.orientation.z, 2);
+
+    /**Writes the following to the SD card storage
+     * Current IMU time (timestamp)
+     * Position X axis based off of the IMU data
+     * Position of the Y axis based off the IMU data
+     * Position of the Z axis based on the IMU data
+     */
+    sensorDataFile.print(currentIMUTime);
+    sensorDataFile.print(posX);
+    sensorDataFile.print(posY);
+    sensorDataFile.print(posZ);
+
     Serial.print("Current time between IMU Update:");
     Serial.print(IMUUpdateInterval);
     Serial.print("X axis: ");
-    Serial.print(getIMUEvent.orientation.x, 2);
+    Serial.print(posX);
     Serial.print("\tY axis: ");
-    Serial.print(getIMUEvent.orientation.y, 2);
+    Serial.print(posY);
     Serial.print("\tZ Axis: ");
-    Serial.print(getIMUEvent.orientation.x, 2);
+    Serial.print(posZ);
     Serial.print("=============================");
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
@@ -119,15 +175,32 @@ void loop()
   unsigned long currentEnvTime = millis(); // Get the current time in milliseconds- could this possibly be merged into the main function
   if (currentEnvTime - EnvCheckTimeElapsed >= EnvUpdateInterval)
   {
+    envTemp = bmp.temperature;
+    envPressure = bmp.pressure / 100;
+    envAltitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+
+    /**Writes the following to the SD card
+     * The Current Environment sensor time (timestamp)
+     * Temperature sensor reading/data
+     * Pressure sensor reading/data
+     * Altitude sensor reading/data
+     */
+
+    sensorDataFile.print(currentEnvTime);
+    sensorDataFile.print(envTemp);
+    sensorDataFile.print(envPressure);
+    sensorDataFile.print(envAltitude);
+
     Serial.print("Current time between Environmental sensor update");
-    Serial.print(bmp.temperature); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
+    Serial.print(currentEnvTime);
     Serial.print(" Celsius");
+    Serial.print(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
     Serial.print("Pressure");
-    Serial.print(bmp.pressure / 100); // TODO: This is in HPA. Do we want that?
+    Serial.print(envPressure); // TODO: This is in HPA. Do we want that?
     Serial.print("Altitude:");
-    Serial.print(bmp.readAltitude(SEALEVELPRESSURE_HPA)); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
+    Serial.print(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
     Serial.print(" meters");
   }
 }
 
-// put function definitions here:
+
