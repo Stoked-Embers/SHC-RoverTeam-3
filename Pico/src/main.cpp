@@ -77,12 +77,15 @@ void setup()
   const int sdOutputPin = 11;
 
   sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
-  if(sensorDataFile){
+  if (sensorDataFile)
+  {
     Serial.println("Checking SD card...");
     sensorDataFile.println("SD card test");
     sensorDataFile.close();
     Serial.println("SD card check passed");
-  } else{
+  }
+  else
+  {
     Serial.println("SD card check failed. Check pin initialization and wiring.");
   }
 
@@ -202,5 +205,3 @@ void loop()
     Serial.print(" meters");
   }
 }
-
-
