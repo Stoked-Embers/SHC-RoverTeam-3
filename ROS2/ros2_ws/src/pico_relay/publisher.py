@@ -20,12 +20,12 @@ class publisher(Node):
         self.triggerCount +=1
 
 def main(args = None):
-    rclypy.init(args= args) #TODO: What args do we need?
+    rclpy.init(args= args) #TODO: What args do we need?
     publisher = publisher() #! TODO: This seems weird
-    rclypy.spin(publisher)
+    rclpy.spin(publisher)
 
     publisher.destroy_node()
-    rclypy.shtudown()
+    rclpy.shtudown()
 
 if __name__ == '__main__':
     main()
