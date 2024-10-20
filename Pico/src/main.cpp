@@ -16,6 +16,7 @@
 #include "Adafruit_BMP3XX.h"
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
+#include <Servo.h>
 
 #define BMP_SCK 13
 #define BMP_MISO 12
@@ -75,6 +76,38 @@ void setup()
 
   // Set pin on the pico which the SD card is on, so we can save a file
   const int sdOutputPin = 11;
+
+  /**Servo initialization
+   * https://docs.arduino.cc/libraries/servo/
+   * baseRotationServo - 1st servo, controls rotation of the arm base
+   * basePitchServo - 2nd servo from the bottom, used to control pitch of the arm
+   * midPitchServo - 3rd servo from the bottom, controlls the pitch of the portion of the arm with the end effector
+   * wristPitchServo - 4th servo from the bottom, controlls the pitch of the wrist
+   * clawServo - 5th servo from the bottom, controls the closing and opening action of the claw
+   * 
+   * base is GM3 motor/ solar
+   * axis 1 is 25 kg
+   * all other axis are basic servos
+   */
+
+  Servo baseRotationServo;
+  Servo basePitchServo;
+  Servo midPitchServo;
+  Servo wristPitchServo;
+  Servo clawServo;
+
+  // ! These are untested. Need confirmation of how these
+  // TODO: Figure out if these are the correct binding. Ask for clarification on this
+  baseRotationServo.attach(4);
+  basePitchServo.attach(1);
+  clawServo.attach(2);
+  wristPitchServo.attach(5);
+  clawServo.attach(6);
+
+
+
+  
+
 
   sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
   if (sensorDataFile)
