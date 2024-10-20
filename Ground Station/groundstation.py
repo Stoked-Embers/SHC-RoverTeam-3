@@ -33,13 +33,19 @@ class controllerInput(pygame):
     pygame.init()
     joysticks = []
     clock = pygame.time.Clock()
-    continuePlaying = True
+    allowControllerInput = True
 
     # Iterates throught the array, initializing joysticks
+    # ! You will have to run this and wait for it to iterate through the controller and discover all the buttons on the controller
     for i in range(0, pygame.joystick.get_count):
         joysticks.append(pygame.joystick.Joystick(i))
         joysticks[-1].init()
         print("Joystick found"), joysticks[-1].get_name(), " ' "
+
+    while allowControllerInput:
+        for event in pygame.event.get():
+            if event.button == 0:
+                print("This is a test")
 
 class AccelerationGraph(FigureCanvas):
     def __init__(self, parent = None, width = 5, height = 4, dpi = 100):
