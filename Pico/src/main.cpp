@@ -84,7 +84,7 @@ void setup()
    * midPitchServo - 3rd servo from the bottom, controlls the pitch of the portion of the arm with the end effector
    * wristPitchServo - 4th servo from the bottom, controlls the pitch of the wrist
    * clawServo - 5th servo from the bottom, controls the closing and opening action of the claw
-   * 
+   *
    * base is GM3 motor/ solar
    * axis 1 is 25 kg
    * all other axis are basic servos
@@ -104,11 +104,7 @@ void setup()
   wristPitchServo.attach(5);
   clawServo.attach(6);
 
-
-
-  
-
-
+  // This should create a file if it does not exist
   sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
   if (sensorDataFile)
   {
@@ -227,6 +223,8 @@ void loop()
      * Pressure sensor reading/data
      * Altitude sensor reading/data
      */
+
+    // TODO: There is a better way to do this with headers, but this will work for now
     sensorDataFile.print(", currentEnvTime ,");
     sensorDataFile.print(currentEnvTime);
     sensorDataFile.print(", envTemp ,");
