@@ -109,7 +109,7 @@ void setup()
   
 
 
-  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+  sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
   if (sensorDataFile)
   {
     Serial.println("Checking SD card...");
@@ -181,9 +181,15 @@ void loop()
      * Position of the Y axis based off the IMU data
      * Position of the Z axis based on the IMU data
      */
+
+    // TODO: There is a better way to do this with headers, but this will work for now
+    sensorDataFile.print(", currentIMUTime ,");
     sensorDataFile.print(currentIMUTime);
+    sensorDataFile.print(" , posX ,");
     sensorDataFile.print(posX);
+    sensorDataFile.print(" , posY ,");
     sensorDataFile.print(posY);
+    sensorDataFile.print(" , posZ ,");
     sensorDataFile.print(posZ);
 
     Serial.print("Current time between IMU Update:");
@@ -221,10 +227,13 @@ void loop()
      * Pressure sensor reading/data
      * Altitude sensor reading/data
      */
-
+    sensorDataFile.print(", currentEnvTime ,");
     sensorDataFile.print(currentEnvTime);
+    sensorDataFile.print(", envTemp ,");
     sensorDataFile.print(envTemp);
+    sensorDataFile.print(", envPressure ,");
     sensorDataFile.print(envPressure);
+    sensorDataFile.print(", envAltitude ,");
     sensorDataFile.print(envAltitude);
 
     Serial.print("Current time between Environmental sensor update");
