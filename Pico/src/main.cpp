@@ -174,6 +174,10 @@ void loop()
   {
     receivedCommand = Serial.readStringUntil('\n');
     receivedCommand.trim();
+    // TODO: Take a look at integrating serial reading for axis movement
+    if(receivedCommand.equals("X,-180")){
+      Serial.print("Test");
+    }
   }
 
   if (currentIMUTime - IMUCheckTimeElapsed >= IMUUpdateInterval)
