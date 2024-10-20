@@ -44,12 +44,14 @@ double posX = 0.0;
 double posY = 0.0;
 double posZ = 0.0;
 
+String receivedCommand = "";
+
 File sensorDataFile;
 void setup()
 {
   // put your setup code here, to run once:
 
-  Serial.begin(9600); // Begin broadcasting over serial on a baud rate of 9600
+  Serial.begin(9600); // Begin broadcasting/receiving over serial on a baud rate of 9600
   while (!Serial)
     ; // Execute while not running in serial mode
 
@@ -81,8 +83,8 @@ void setup()
    * https://docs.arduino.cc/libraries/servo/
    * baseRotationServo - 1st servo, controls rotation of the arm base
    * basePitchServo - 2nd servo from the bottom, used to control pitch of the arm
-   * midPitchServo - 3rd servo from the bottom, controlls the pitch of the portion of the arm with the end effector
-   * wristPitchServo - 4th servo from the bottom, controlls the pitch of the wrist
+   * midPitchServo - 3rd servo from the bottom, controls the pitch of the portion of the arm with the end effector
+   * wristPitchServo - 4th servo from the bottom, controls the pitch of the wrist
    * clawServo - 5th servo from the bottom, controls the closing and opening action of the claw
    *
    * base is GM3 motor/ solar
@@ -161,11 +163,24 @@ void loop()
 
   unsigned long currentIMUTime = millis(); // Get the current time in milliseconds
 
+  /**Serial communication
+   * TODO: Ensure that the received values are the same as the transmitted values in base station
+   * https://www.elithecomputerguy.com/2020/12/arduino-send-commands-with-serial-communication/
+   * https://www.arduino.cc/reference/tr/language/functions/communication/serial/read/
+   * Check if serial active, then look for commands
+   * Read the string until there is a new line - trim after a new line
+   */
+  if(Serial.available() > 0){
+    receivedCommand = Serial.readStringUntil('\n');
+    receivedCommand.trim();
+    
+  }
+
   if (currentIMUTime - IMUCheckTimeElapsed >= IMUUpdateInterval)
   {
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
-    double updateIMUDelay = 200.00; // TODO: Tune this or convert to a int if needed- don't think that we will truly need a double for this, but might
+    // double updateIMUDelay = 200.00; // TODO: Tune this or convert to a int if needed- don't think that we will truly need a double for this, but might
 
     posX = (getIMUEvent.orientation.x, 2);
     posY = (getIMUEvent.orientation.y, 2);
