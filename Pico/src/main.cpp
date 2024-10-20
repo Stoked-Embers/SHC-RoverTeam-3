@@ -170,17 +170,17 @@ void loop()
    * Check if serial active, then look for commands
    * Read the string until there is a new line - trim after a new line
    */
-  if(Serial.available() > 0){
+  if (Serial.available() > 0)
+  {
     receivedCommand = Serial.readStringUntil('\n');
     receivedCommand.trim();
-    
   }
 
   if (currentIMUTime - IMUCheckTimeElapsed >= IMUUpdateInterval)
   {
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
-    // double updateIMUDelay = 200.00; // TODO: Tune this or convert to a int if needed- don't think that we will truly need a double for this, but might
+    
 
     posX = (getIMUEvent.orientation.x, 2);
     posY = (getIMUEvent.orientation.y, 2);
