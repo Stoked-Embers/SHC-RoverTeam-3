@@ -18,7 +18,28 @@ from PyQt5.QtCore import QTimer
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import PyQt5
+import pygame
+
 PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+
+
+class controllerInput(pygame):
+    # Pygame controller import and initialization
+    # TODO: See if we should put this in a class
+    # ! Using info from the following source, may not work effectively
+    # ! Might need to put this in a class at some point
+    # https://stackoverflow.com/questions/46506850/how-can-i-get-input-from-an-xbox-one-controller-in-python
+
+    pygame.init()
+    joysticks = []
+    clock = pygame.time.Clock()
+    continuePlaying = True
+
+    # Iterates throught the array, initializing joysticks
+    for i in range(0, pygame.joystick.get_count):
+        joysticks.append(pygame.joystick.Joystick(i))
+        joysticks[-1].init()
+        print("Joystick found"), joysticks[-1].get_name(), " ' "
 
 class AccelerationGraph(FigureCanvas):
     def __init__(self, parent = None, width = 5, height = 4, dpi = 100):
