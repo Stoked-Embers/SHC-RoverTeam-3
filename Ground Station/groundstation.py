@@ -37,6 +37,7 @@ class controllerInput(pygame):
 
     # Iterates throught the array, initializing joysticks
     # ! You will have to run this and wait for it to iterate through the controller and discover all the buttons on the controller
+    # TODO: Need to make a map of the the inputs and outputs once iterated through
     for i in range(0, pygame.joystick.get_count):
         joysticks.append(pygame.joystick.Joystick(i))
         joysticks[-1].init()
@@ -45,6 +46,14 @@ class controllerInput(pygame):
     while allowControllerInput:
         for event in pygame.event.get():
             if event.button == 0:
+                print("This is a test")
+            elif event.button == 1:
+                print("This is a test")
+            elif event.button == 2:
+                print("This is a test")
+            elif event.button == 3:
+                print("This is a test")
+            else:
                 print("This is a test")
 
 class AccelerationGraph(FigureCanvas):
