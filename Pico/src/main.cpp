@@ -17,11 +17,23 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <Servo.h>
+#include <SparkFun_TB6612.h>
 
 #define BMP_SCK 13
 #define BMP_MISO 12
 #define BMP_MOSI 11
 #define BMP_CS 10
+#define PWMB 6
+#define BIN1 9
+#define BIN2 7
+
+// https://electropeak.com/learn/interfacing-tb6612fng-dual-motor-driver-module-with-arduino/#google_vignette
+// Motor constants
+
+
+
+
+// ! This is really hard to visualize without looking at real HW
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 #define SEALEVELPRESSURE_HPA (1013.25) // TODO: Does this value need to be tuned
@@ -177,6 +189,7 @@ void loop()
     // TODO: Take a look at integrating serial reading for axis movement
     if(receivedCommand.equals("X,-180")){
       Serial.print("Test");
+     
     }
   }
 
