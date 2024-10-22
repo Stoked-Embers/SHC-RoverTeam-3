@@ -19,6 +19,7 @@
 #include <Servo.h>
 #include <SparkFun_TB6612.h>
 
+
 #define BMP_SCK 13
 #define BMP_MISO 12
 #define BMP_MOSI 11
@@ -26,10 +27,10 @@
 #define PWMB 6
 #define BIN1 9
 #define BIN2 7
-
-// https://electropeak.com/learn/interfacing-tb6612fng-dual-motor-driver-module-with-arduino/#google_vignette
-// Motor constants
-
+#define STBY 41
+/**Notes for tb6612 driver
+ * https://electropeak.com/learn/interfacing-tb6612fng-dual-motor-driver-module-with-arduino/#google_vignette
+ */
 
 
 
@@ -56,6 +57,11 @@ double posX = 0.0;
 double posY = 0.0;
 double posZ = 0.0;
 
+const int baseRotateOffset = 1;
+const int basePitchOffset = 1;
+
+Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
+Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
 String receivedCommand = "";
 
 File sensorDataFile;
@@ -64,8 +70,7 @@ void setup()
   // put your setup code here, to run once:
 
   Serial.begin(9600); // Begin broadcasting/receiving over serial on a baud rate of 9600
-  while (!Serial)
-    ; // Execute while not running in serial mode
+  while (!Serial); // Execute while not running in serial mode
 
   // Set up pins for digital input and output- for help refer to the "Resources" folder for the schematic
   // Using pins 1-6 for servo output.
@@ -98,22 +103,19 @@ void setup()
    * midPitchServo - 3rd servo from the bottom, controls the pitch of the portion of the arm with the end effector
    * wristPitchServo - 4th servo from the bottom, controls the pitch of the wrist
    * clawServo - 5th servo from the bottom, controls the closing and opening action of the claw
-   *
-   * base is GM3 motor/ solar
+   * base is GM3 motor/ servo
    * axis 1 is 25 kg
    * all other axis are basic servos
    */
 
-  Servo baseRotationServo;
-  Servo basePitchServo;
+  
   Servo midPitchServo;
   Servo wristPitchServo;
   Servo clawServo;
 
   // ! These are untested. Need confirmation of how these
   // TODO: Figure out if these are the correct binding. Ask for clarification on this
-  baseRotationServo.attach(4);
-  basePitchServo.attach(1);
+ 
   clawServo.attach(2);
   wristPitchServo.attach(5);
   clawServo.attach(6);
@@ -125,7 +127,7 @@ void setup()
     Serial.println("Checking SD card...");
     sensorDataFile.println("SD card test");
     sensorDataFile.close();
-    Serial.println("SD card check passed");
+    Serial.println("SD card file creation ok");
   }
   else
   {
@@ -136,14 +138,12 @@ void setup()
   if (!bmp.begin_SPI(BMP_CS, BMP_SCK, BMP_MISO, BMP_MOSI))
   {
     Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
-    while (1)
-      ; // Throw
+    while (1); // Throw
   }
   if (!bno.begin())
   {
     Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
-    while (1)
-      ;
+    while (1);
   }
   // Throw if the SD card cant be written to
   if (!SD.begin(sdOutputPin))
@@ -189,6 +189,7 @@ void loop()
     // TODO: Take a look at integrating serial reading for axis movement
     if(receivedCommand.equals("X,-180")){
       Serial.print("Test");
+     
      
     }
   }
