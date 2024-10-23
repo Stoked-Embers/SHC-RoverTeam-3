@@ -1,14 +1,14 @@
 # Most of this is similar to the publisher code
 
 import rclpy
-from rclp.node import node
+from rclpy.node import Node
 
 from std_msgs.msg import String 
 
 class publisher(Node):
     def __init__(self):
         super().__init__('publisher')
-        self.subscription= self.create_subscription(Strng, topic, self.printMessage)
+        self.subscription= self.create_subscription(String, topic, self.printMessage)
         self.subscription
 
     def printMessage(self):

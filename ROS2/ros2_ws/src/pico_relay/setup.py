@@ -23,6 +23,8 @@ setup(
             "relay = pico_relay.relay_node:main",
             'talker = py_pubsub.publisher_member_function:main',
             'listener = py_pubsub.publisher_subscriber_function:main'
+            'publisher = py_pubsub.publisher_member_function:main'
+            'subscriber = py_pubsub.publisher_subscriber_function:main'
         ],
     },
 )

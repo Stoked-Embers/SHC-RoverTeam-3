@@ -1,6 +1,6 @@
-#do source /opt/ros/humble/setup.bash in the terminal (doing this in the ROS2 directory worked for me - wyatt)
 import rclpy
 from rclpy.node import Node
+import sys
 
 from std_msgs.msg import String 
 
