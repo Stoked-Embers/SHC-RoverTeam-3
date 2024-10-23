@@ -1,0 +1,42 @@
+[0.613s] Invoking command in '/home/wyatt/ros2_ws/src/build/data_relay': PYTHONPATH=/home/wyatt/ros2_ws/src/build/data_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --uninstall --editable --build-directory /home/wyatt/ros2_ws/src/build/data_relay/build
+[0.764s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[0.764s]   warnings.warn(
+[0.765s] running develop
+[0.859s] Removing /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data-relay.egg-link (link to .)
+[0.880s] Invoked command in '/home/wyatt/ros2_ws/src/build/data_relay' returned '0': PYTHONPATH=/home/wyatt/ros2_ws/src/build/data_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --uninstall --editable --build-directory /home/wyatt/ros2_ws/src/build/data_relay/build
+[0.883s] Invoking command in '/home/wyatt/ros2_ws/src/data_relay': PYTHONPATH=/home/wyatt/ros2_ws/src/build/data_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/data_relay build --build-base /home/wyatt/ros2_ws/src/build/data_relay/build install --record /home/wyatt/ros2_ws/src/build/data_relay/install.log --single-version-externally-managed install_data --force
+[1.015s] running egg_info
+[1.015s] writing ../build/data_relay/data_relay.egg-info/PKG-INFO
+[1.016s] writing dependency_links to ../build/data_relay/data_relay.egg-info/dependency_links.txt
+[1.017s] writing entry points to ../build/data_relay/data_relay.egg-info/entry_points.txt
+[1.017s] writing requirements to ../build/data_relay/data_relay.egg-info/requires.txt
+[1.017s] writing top-level names to ../build/data_relay/data_relay.egg-info/top_level.txt
+[1.019s] reading manifest file '../build/data_relay/data_relay.egg-info/SOURCES.txt'
+[1.019s] writing manifest file '../build/data_relay/data_relay.egg-info/SOURCES.txt'
+[1.019s] running build
+[1.019s] running build_py
+[1.019s] creating /home/wyatt/ros2_ws/src/build/data_relay/build
+[1.019s] creating /home/wyatt/ros2_ws/src/build/data_relay/build/lib
+[1.020s] creating /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay
+[1.020s] copying data_relay/listener.py -> /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay
+[1.020s] copying data_relay/talker.py -> /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay
+[1.020s] copying data_relay/__init__.py -> /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay
+[1.021s] running install
+[1.021s] running install_lib
+[1.022s] creating /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay
+[1.022s] copying /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay/listener.py -> /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay
+[1.022s] copying /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay/talker.py -> /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay
+[1.022s] copying /home/wyatt/ros2_ws/src/build/data_relay/build/lib/data_relay/__init__.py -> /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay
+[1.022s] byte-compiling /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay/listener.py to listener.cpython-310.pyc
+[1.022s] byte-compiling /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay/talker.py to talker.cpython-310.pyc
+[1.022s] byte-compiling /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay/__init__.py to __init__.cpython-310.pyc
+[1.022s] running install_data
+[1.022s] copying resource/data_relay -> /home/wyatt/ros2_ws/src/install/data_relay/share/ament_index/resource_index/packages
+[1.022s] copying package.xml -> /home/wyatt/ros2_ws/src/install/data_relay/share/data_relay
+[1.022s] running install_egg_info
+[1.023s] Copying ../build/data_relay/data_relay.egg-info to /home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages/data_relay-0.0.0-py3.10.egg-info
+[1.023s] running install_scripts
+[1.036s] Installing listener_node script to /home/wyatt/ros2_ws/src/install/data_relay/lib/data_relay
+[1.036s] Installing talker_node script to /home/wyatt/ros2_ws/src/install/data_relay/lib/data_relay
+[1.036s] writing list of installed files to '/home/wyatt/ros2_ws/src/build/data_relay/install.log'
+[1.056s] Invoked command in '/home/wyatt/ros2_ws/src/data_relay' returned '0': PYTHONPATH=/home/wyatt/ros2_ws/src/build/data_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/ros2_ws/src/install/data_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/data_relay build --build-base /home/wyatt/ros2_ws/src/build/data_relay/build install --record /home/wyatt/ros2_ws/src/build/data_relay/install.log --single-version-externally-managed install_data --force

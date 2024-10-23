@@ -1,0 +1,3 @@
+[0.000000] (-) TimerEvent: {}
+[0.000394] (-) JobUnselected: {'identifier': 'pico_relay'}
+[0.000423] (-) EventReactorShutdown: {}
