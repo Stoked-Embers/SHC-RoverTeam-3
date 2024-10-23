@@ -19,6 +19,7 @@
 #include <Servo.h>
 // #include <SparkFun_TB6612.h>
 
+// TODO: Double check these
 #define BMP_SCK 13
 #define BMP_MISO 12
 #define BMP_MOSI 11
@@ -54,8 +55,8 @@ double posX = 0.0;
 double posY = 0.0;
 double posZ = 0.0;
 
-const int baseRotateOffset = 1;
 const int basePitchOffset = 1;
+const int baseRotateOffset = 1;
 
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
@@ -199,12 +200,24 @@ void loop()
   // TODO: Need to add acceleration to the file writing and to the serial output as well
   if (currentIMUTime - IMUCheckTimeElapsed >= IMUUpdateInterval)
   {
+    imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
 
     posX = (getIMUEvent.orientation.x, 2);
     posY = (getIMUEvent.orientation.y, 2);
     posZ = (getIMUEvent.orientation.z, 2);
+    uint8_t system, gyro, accel, mag = 0;
+    bno.getCalibration(&system, &gyro, &accel, &mag);
+    Serial.print("Calibration values:");
+    Serial.print(system, DEC);
+    // Serial.print("Gyro=");
+    // Serial.print(gyro, DEC);
+    Serial.print("Acceleration");
+    Serial.print(accel, DEC);
+    // Serial.print("Magnetometer");
+    // Serial.print(mag, DEC);
+
 
 
     // TODO: There is a better way to do this with headers, but this will work for now
@@ -214,12 +227,14 @@ void loop()
     {
       sensorDataFile.print(", currentIMUTime ,");
       sensorDataFile.print(currentIMUTime);
-      sensorDataFile.print(" , posX ,");
+      sensorDataFile.print("  posX ,");
       sensorDataFile.print(posX);
-      sensorDataFile.print(" , posY ,");
+      sensorDataFile.print("  posY ,");
       sensorDataFile.print(posY);
-      sensorDataFile.print(" , posZ ,");
+      sensorDataFile.print("  posZ ,");
       sensorDataFile.print(posZ);
+      sensorDataFile.print(" acceleration ,");
+      sensorDataFile.print(accel, DEC); 
 
       sensorDataFile.close();
     }
