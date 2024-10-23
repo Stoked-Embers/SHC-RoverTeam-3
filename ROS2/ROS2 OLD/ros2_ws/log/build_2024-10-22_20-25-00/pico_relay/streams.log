@@ -1,0 +1,23 @@
+[0.966s] Invoking command in '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/src/pico_relay': PYTHONPATH=/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/pico_relay build --build-base /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/build install --record /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/install.log --single-version-externally-managed install_data
+[1.292s] running egg_info
+[1.294s] writing ../../build/pico_relay/pico_relay.egg-info/PKG-INFO
+[1.294s] writing dependency_links to ../../build/pico_relay/pico_relay.egg-info/dependency_links.txt
+[1.295s] writing entry points to ../../build/pico_relay/pico_relay.egg-info/entry_points.txt
+[1.297s] writing requirements to ../../build/pico_relay/pico_relay.egg-info/requires.txt
+[1.297s] writing top-level names to ../../build/pico_relay/pico_relay.egg-info/top_level.txt
+[1.297s] reading manifest file '../../build/pico_relay/pico_relay.egg-info/SOURCES.txt'
+[1.299s] writing manifest file '../../build/pico_relay/pico_relay.egg-info/SOURCES.txt'
+[1.300s] running build
+[1.300s] running build_py
+[1.301s] running install
+[1.301s] running install_lib
+[1.303s] running install_data
+[1.303s] running install_egg_info
+[1.306s] removing '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/python3.10/site-packages/pico_relay-0.0.0-py3.10.egg-info' (and everything under it)
+[1.308s] Copying ../../build/pico_relay/pico_relay.egg-info to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/python3.10/site-packages/pico_relay-0.0.0-py3.10.egg-info
+[1.310s] running install_scripts
+[1.337s] Installing listener script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/py_pubsub
+[1.340s] Installing relay script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/py_pubsub
+[1.340s] Installing talker script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/py_pubsub
+[1.340s] writing list of installed files to '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/install.log'
+[1.372s] Invoked command in '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/src/pico_relay' returned '0': PYTHONPATH=/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/pico_relay build --build-base /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/build install --record /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/pico_relay/install.log --single-version-externally-managed install_data

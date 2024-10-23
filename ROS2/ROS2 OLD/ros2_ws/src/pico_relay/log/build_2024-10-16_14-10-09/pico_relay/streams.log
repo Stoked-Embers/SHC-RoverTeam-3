@@ -1,0 +1,35 @@
+[0.963s] Invoking command in '/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay': PYTHONPATH=/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/prefix_override:/home/jackr/.pyenv/versions/3.12.7/lib/python3.12/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages: /home/jackr/.pyenv/versions/3.12.7/bin/python3.12 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/pico_relay build --build-base /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build install --record /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/install.log --single-version-externally-managed install_data
+[1.262s] /home/jackr/.pyenv/versions/3.12.7/lib/python3.12/site-packages/setuptools/_distutils/dist.py:261: UserWarning: Unknown distribution option: 'tests_require'
+[1.262s]   warnings.warn(msg)
+[1.333s] running egg_info
+[1.346s] creating build/pico_relay/pico_relay.egg-info
+[1.347s] writing build/pico_relay/pico_relay.egg-info/PKG-INFO
+[1.348s] writing dependency_links to build/pico_relay/pico_relay.egg-info/dependency_links.txt
+[1.348s] writing entry points to build/pico_relay/pico_relay.egg-info/entry_points.txt
+[1.349s] writing requirements to build/pico_relay/pico_relay.egg-info/requires.txt
+[1.349s] writing top-level names to build/pico_relay/pico_relay.egg-info/top_level.txt
+[1.349s] writing manifest file 'build/pico_relay/pico_relay.egg-info/SOURCES.txt'
+[1.371s] reading manifest file 'build/pico_relay/pico_relay.egg-info/SOURCES.txt'
+[1.374s] writing manifest file 'build/pico_relay/pico_relay.egg-info/SOURCES.txt'
+[1.374s] running build
+[1.374s] running build_py
+[1.374s] creating /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build/lib/pico_relay
+[1.375s] copying pico_relay/__init__.py -> /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build/lib/pico_relay
+[1.376s] copying pico_relay/relay_node.py -> /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build/lib/pico_relay
+[1.376s] running install
+[1.386s] running install_lib
+[1.397s] creating /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages/pico_relay
+[1.397s] copying /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build/lib/pico_relay/__init__.py -> /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages/pico_relay
+[1.398s] copying /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build/lib/pico_relay/relay_node.py -> /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages/pico_relay
+[1.399s] byte-compiling /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages/pico_relay/__init__.py to __init__.cpython-312.pyc
+[1.399s] byte-compiling /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages/pico_relay/relay_node.py to relay_node.cpython-312.pyc
+[1.402s] running install_data
+[1.403s] creating /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/share/ament_index/resource_index/packages
+[1.403s] copying resource/pico_relay -> /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/share/ament_index/resource_index/packages
+[1.405s] copying package.xml -> /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/share/pico_relay
+[1.405s] running install_egg_info
+[1.419s] Copying build/pico_relay/pico_relay.egg-info to /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages/pico_relay-0.0.0-py3.12.egg-info
+[1.421s] running install_scripts
+[1.494s] Installing relay script to /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/pico_relay
+[1.494s] writing list of installed files to '/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/install.log'
+[1.540s] Invoked command in '/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay' returned '0': PYTHONPATH=/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/prefix_override:/home/jackr/.pyenv/versions/3.12.7/lib/python3.12/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/install/pico_relay/lib/python3.12/site-packages: /home/jackr/.pyenv/versions/3.12.7/bin/python3.12 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/pico_relay build --build-base /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/build install --record /home/jackr/Documents/SHC/Two Month/Template/SHC-Rover-Team3/SHC-RoverTeam-3/ROS2/Example/ros2_ws/src/pico_relay/build/pico_relay/install.log --single-version-externally-managed install_data

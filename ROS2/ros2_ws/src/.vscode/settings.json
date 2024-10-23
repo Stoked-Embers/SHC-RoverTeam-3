@@ -1,0 +1,16 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/wyatt/Documents/Wyatt ROS2/ros2_ws/build/relay_package",
+        "/home/wyatt/Documents/Wyatt ROS2/ros2_ws/install/relay_package/lib/python3.10/site-packages",
+        "/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/wyatt/Documents/Wyatt ROS2/ros2_ws/build/relay_package",
+        "/home/wyatt/Documents/Wyatt ROS2/ros2_ws/install/relay_package/lib/python3.10/site-packages",
+        "/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/pico_relay/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

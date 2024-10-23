@@ -1,0 +1,4 @@
+[console_scripts]
+listener_node = data_relay.listener:main
+talker_node = data_relay.talker:main
+
