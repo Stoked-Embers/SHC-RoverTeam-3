@@ -32,7 +32,7 @@ class TalkerNode(Node):
 
         msg = String()
         msg.data = str(self.motor_speed)
-        self.publisher_.publish(msg)
+        self.publisher_.publish(msg + "\n")
         self.get_logger().info("Publishing: " + msg.data)
 
 def main(args=None):
