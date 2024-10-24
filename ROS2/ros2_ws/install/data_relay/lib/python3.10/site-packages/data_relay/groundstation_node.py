@@ -22,7 +22,7 @@ class TalkerNode(Node):
 
         self.ui = ui
 
-        self.publisher_ = self.create_publisher(String, 'motor_topic', 10)
+        self.publisher_ = self.create_publisher(String, '/pico/command', 10)
         self.motor_speed = 0
         self.create_timer(0.1, self.timer_callback)
     

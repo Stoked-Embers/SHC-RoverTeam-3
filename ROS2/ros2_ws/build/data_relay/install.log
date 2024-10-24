@@ -28,6 +28,6 @@
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/groundstation_node
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/listener_node
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/motor_talker
-/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/pico_relay
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/pygame_node
+/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/relay_node
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/talker_node
