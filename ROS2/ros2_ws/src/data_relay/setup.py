@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             "talker_node = data_relay.talker:main",
-            "listener_node = data_relay.listener:main"
+            "listener_node = data_relay.listener:main",
+            "groundstation_node = data_relay.groundstation_node:main"
         ],
     },
 )

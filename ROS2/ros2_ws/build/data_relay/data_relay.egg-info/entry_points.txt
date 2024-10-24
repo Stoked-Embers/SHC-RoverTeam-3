@@ -1,0 +1,5 @@
+[console_scripts]
+groundstation_node = data_relay.groundstation_node:main
+listener_node = data_relay.listener:main
+talker_node = data_relay.talker:main
+
