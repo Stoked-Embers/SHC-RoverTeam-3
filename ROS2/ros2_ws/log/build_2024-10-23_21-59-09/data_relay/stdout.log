@@ -1,0 +1,26 @@
+running egg_info
+writing ../../build/data_relay/data_relay.egg-info/PKG-INFO
+writing dependency_links to ../../build/data_relay/data_relay.egg-info/dependency_links.txt
+writing entry points to ../../build/data_relay/data_relay.egg-info/entry_points.txt
+writing requirements to ../../build/data_relay/data_relay.egg-info/requires.txt
+writing top-level names to ../../build/data_relay/data_relay.egg-info/top_level.txt
+reading manifest file '../../build/data_relay/data_relay.egg-info/SOURCES.txt'
+writing manifest file '../../build/data_relay/data_relay.egg-info/SOURCES.txt'
+running build
+running build_py
+copying data_relay/relay_node.py -> /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/build/lib/data_relay
+running install
+running install_lib
+copying /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/build/lib/data_relay/relay_node.py -> /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay
+byte-compiling /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/relay_node.py to relay_node.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/data_relay/data_relay.egg-info to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay-0.0.0-py3.10.egg-info
+running install_scripts
+Installing groundstation_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+Installing listener_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+Installing motor_talker script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+Installing pico_relay script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+Installing talker_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+writing list of installed files to '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/install.log'

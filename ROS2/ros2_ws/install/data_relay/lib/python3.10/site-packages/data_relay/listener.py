@@ -9,11 +9,11 @@ class ListenerNode(Node):
     def __init__(self):
         super().__init__("listener_node")
         self.listener_ = self.create_subscription(
-            String, 'motor_speed', self.listener_callback, 10)
+            String, 'motor_topic', self.listener_callback, 10)
         self.listener_
 
     def listener_callback(self, msg):
-        self.get_logger().info("I heard: " + msg.data)
+        self.get_logger().info(msg.data)
 
 
 def main(args=None):

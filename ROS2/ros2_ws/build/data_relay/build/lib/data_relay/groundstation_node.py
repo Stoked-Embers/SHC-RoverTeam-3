@@ -454,7 +454,7 @@ class Ui_MainWindow(object):
     
 
     def update_joint_speeds(self):
-        self.global_speed = self.globalMotorSpeedSpinBox.value()
+        global_speed = self.globalMotorSpeedSpinBox.value()
         self.globalMotorSpeedSpinBox.setRange(0, 100)
 
         #prevent triggering self.clear_global_speed
@@ -462,9 +462,9 @@ class Ui_MainWindow(object):
         self.midSpinBox.blockSignals(True)
         self.endSpinBox.blockSignals(True)
 
-        self.baseSpinBox.setValue(self.global_speed)
-        self.midSpinBox.setValue(self.global_speed)
-        self.endSpinBox.setValue(self.global_speed)
+        self.baseSpinBox.setValue(global_speed)
+        self.midSpinBox.setValue(global_speed)
+        self.endSpinBox.setValue(global_speed)
 
         #re-enable signals for spinboxes
         self.baseSpinBox.blockSignals(False)
@@ -498,30 +498,33 @@ class Ui_MainWindow(object):
 
 class TalkerNode(Node):
 
-    if __name__ == "__main__":
-        app = QtWidgets.QApplication(sys.argv)
-        MainWindow = QtWidgets.QMainWindow()
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
-        MainWindow.show()
-        sys.exit(app.exec_())
-
-    def __init__(self):
+    def __init__(self, ui):
         super().__init__("talker_node")
-        self.publisher_ = self.create_publisher(String, 'topic', 10)
+        self.publisher_ = self.create_publisher(String, 'motor_speed', 10)
         self.global_speed_ = 0
+        self.ui = ui
         self.create_timer(1.0, self.timer_callback)
 
     def timer_callback(self):
-        ui = Ui_MainWindow()
         msg = String()
+        self.global_speed_ = self.ui.globalMotorSpeedSpinBox.value()
         msg.data = "Test message " + str(self.global_speed_)
         self.publisher_.publish(msg)
         self.get_logger().info("Publishing: " + msg.data)
-        self.global_speed_ = str(QtWidgets(ui.globalMotorSpeedSpinBox.value()))
 
 def main(args=None):
     rclpy.init(args=args)       # Initializes ROS2 communications & features
-    node = TalkerNode()
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+
+    node = TalkerNode(ui)
     rclpy.spin(node)            # keeps the node alive
     rclpy.shutdown()            # Ends ROS2 communications
+
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+        main()

@@ -12,7 +12,8 @@ data_relay/__init__.py
 data_relay/diagrams_rc.py
 data_relay/groundstation_node.py
 data_relay/listener.py
-data_relay/talker copy.py
+data_relay/motor_talker.py
+data_relay/relay_node.py
 data_relay/talker.py
 resource/data_relay
 test/test_copyright.py
