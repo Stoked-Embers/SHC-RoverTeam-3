@@ -4,6 +4,8 @@
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/diagrams_rc.py
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/groundstation_node.py
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/motor_talker.py
+/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/pygame_node.py
+/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/groundstation.py
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/relay_node.py
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/listener.cpython-310.pyc
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/talker.cpython-310.pyc
@@ -11,6 +13,8 @@
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/diagrams_rc.cpython-310.pyc
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/groundstation_node.cpython-310.pyc
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/motor_talker.cpython-310.pyc
+/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/pygame_node.cpython-310.pyc
+/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/groundstation.cpython-310.pyc
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay/__pycache__/relay_node.cpython-310.pyc
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/share/ament_index/resource_index/packages/data_relay
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/share/data_relay/package.xml
@@ -25,4 +29,5 @@
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/listener_node
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/motor_talker
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/pico_relay
+/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/pygame_node
 /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay/talker_node

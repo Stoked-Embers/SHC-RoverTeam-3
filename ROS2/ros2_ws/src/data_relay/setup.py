@@ -22,9 +22,10 @@ setup(
         'console_scripts': [
             "talker_node = data_relay.talker:main",
             "listener_node = data_relay.listener:main",
-            "groundstation_node = data_relay.groundstation_node:main",
+            "pygame_node = data_relay.pygame_node:main",
             "motor_talker = data_relay.motor_talker:main",
-            "pico_relay = data_relay.pico_relay:main"
+            "pico_relay = data_relay.pico_relay:main",
+            "groundstation_node = data_relay.groundstation_node:main"
         ],
     },
 )

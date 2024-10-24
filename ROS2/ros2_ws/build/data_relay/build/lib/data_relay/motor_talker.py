@@ -23,11 +23,12 @@ class TalkerNode(Node):
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
-                running = False
+                pygame.display.quit()
+                self.running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and self.motor_speed > 0:
                     self.motor_speed -= 5
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and self.motor_speed < 100:
                     self.motor_speed += 5
 
         msg = String()

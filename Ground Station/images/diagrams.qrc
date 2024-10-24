@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file>armdiagram.png</file>
-    <file>xboxmap.png</file>
-  </qresource>
-</RCC>
