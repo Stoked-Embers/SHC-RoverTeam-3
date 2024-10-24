@@ -56,6 +56,10 @@ double posX = 0.0;
 double posY = 0.0;
 double posZ = 0.0;
 
+double accelX = 0.0;
+double accelY = 0.0;
+double accelZ = 0.0;
+
 const int basePitchOffset = 1;
 const int baseRotateOffset = 1;
 
@@ -238,6 +242,9 @@ void loop()
     // Serial.print(gyro, DEC);
     Serial.print("Acceleration");
     Serial.print(accel, DEC);
+    accelX =(getIMUEvent.acceleration.x);
+    accelY = (getIMUEvent.acceleration.y);
+    accelZ = (getIMUEvent.acceleration.z);
     // Serial.print("Magnetometer");
     // Serial.print(mag, DEC);
 
@@ -254,8 +261,13 @@ void loop()
       sensorDataFile.print(posY);
       sensorDataFile.print("  posZ ,");
       sensorDataFile.print(posZ);
-      sensorDataFile.print(" acceleration ,");
-      sensorDataFile.print(accel, DEC);
+      sensorDataFile.print(" acceleration X,");
+      sensorDataFile.print(accelX);
+      sensorDataFile.print(" acceleration Y,");
+      sensorDataFile.print(accelY);
+      sensorDataFile.print(" acceleration Z,");
+      sensorDataFile.print(accelZ);
+      sensorDataFile.print("\n");
 
       sensorDataFile.close();
     }
@@ -268,10 +280,19 @@ void loop()
     Serial.print(IMUUpdateInterval);
     Serial.print("X axis: ");
     Serial.print(posX);
-    Serial.print("\tY axis: ");
+    Serial.print("Y axis: ");
     Serial.print(posY);
-    Serial.print("\tZ Axis: ");
+    Serial.print("Z Axis: ");
     Serial.print(posZ);
+    Serial.print("Accel X");
+    Serial.print(accelX);
+    Serial.print("Accel Y");
+    Serial.print(accelY);
+    Serial.print("Accel Z");
+    Serial.print(accelZ);
+    
+
+    
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
   }
@@ -317,8 +338,9 @@ void loop()
       sensorDataFile.print(envPressure);
       sensorDataFile.print(", envAltitude ,");
       sensorDataFile.print(envAltitude);
+      sensorDataFile.print("\n");
       sensorDataFile.close();
-      sensorDataFile.close();
+      
     }
     // else{
     //   Serial.print("Sensor data is unable to be written to a file. Please check wiring and pin assignments");
