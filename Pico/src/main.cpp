@@ -21,10 +21,10 @@
 // #include <SparkFun_TB6612.h>
 
 // TODO: Double check these
-#define BMP_SCK 13
-#define BMP_MISO 12
-#define BMP_MOSI 11
-#define BMP_CS 10
+// #define BMP_SCK 13
+// #define BMP_MISO 12
+// #define BMP_MOSI 11
+// #define BMP_CS 10
 #define PWMB 11
 #define BIN1 9
 #define BIN2 10
@@ -62,23 +62,18 @@ const int baseRotateOffset = 1;
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
 
-char receivedValues[];
 const byte numberOfChars = 32;
+char receivedValues[numberOfChars];
+
 File sensorDataFile;
 char endMarker = '\n';
 
 const int PWMA = 8;
-int bin1 = 6;
-int bin2 = 7;
+const int bin1 = 6;
+const int bin2 = 7;
+const int speed = 5;
 
 void driveMotorA(int speed, bool direction);
-
-
-
-
-
-
-
 
 void setup()
 {
@@ -114,7 +109,6 @@ void setup()
   pinMode(bin1, OUTPUT);
   pinMode(bin2, OUTPUT);
 
-
   // Set pin on the pico which the SD card is on, so we can save a file
   const int sdOutputPin = 17; // Actual pin on the pico is 22
 
@@ -135,32 +129,24 @@ void setup()
   Servo clawServo;
 
   // This should create a file if it does not exist
-  sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
-  if (sensorDataFile)
+
+  if (!SD.begin(17))
   {
-    Serial.println("Checking SD card...");
-    sensorDataFile.println("SD card test");
-    sensorDataFile.close();
-    Serial.println("SD card file creation ok");
-    sensorDataFile.close();
+    Serial.println("initialization failed!");
+    while (1);
   }
-  else
-  {
-    Serial.println("SD card check failed. Check pin initialization and wiring.");
-  }
+  Serial.println("initialization done.");
 
   // Check that we are receiving input from the BMP 388, print error message if not
-  if (!bmp.begin_SPI(BMP_CS, BMP_SCK, BMP_MISO, BMP_MOSI))
+  if (!bmp.begin_I2C())
   {
     Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
-    while (1)
-      ; // Throw
+    while (1); // Throw
   }
   if (!bno.begin())
   {
     Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
-    while (1)
-      ;
+    while (1);
   }
   // Throw if the SD card cant be written to
   if (!SD.begin(sdOutputPin))
@@ -200,30 +186,36 @@ void loop()
    * Read the string until there is a new line - trim after a new line
    */
   char receivedTempChar;
-  static byte ndx =0;
+  static byte ndx = 0;
   if (Serial.available() > 0)
   {
     receivedTempChar = Serial.read();
-    if(receivedTempChar != endMarker){
+    if (receivedTempChar != endMarker)
+    {
       receivedValues[ndx] = receivedTempChar;
       ndx++;
-      if (ndx >= numberOfChars){
-        ndx = numberOfChars -1;
+      if (ndx >= numberOfChars)
+      {
+        ndx = numberOfChars - 1;
       }
-      else { 
-        receivedValues[ndx]  = '\0';
+      else
+      {
+        // TODO: Confirm this works 
+        receivedValues[ndx] = '\0';
         ndx = 0;
-        Serial.print(receivedValues);
+        char receivedValues = 'value';
+        int motorPosition = receivedValues;
+        Serial.print(motorPosition);
+        driveMotorA(motorPosition, false);
       }
     }
-
   }
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
    * X axis orientation
    * Y axis orientation
    * Z axis orientation
-   * Acceleration 
+   * Acceleration
    * currentIMU time - in milliseconds
    * Also prints to serial for debugging purposes- can comment out if needed
    */
@@ -235,9 +227,9 @@ void loop()
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
 
-    posX = (getIMUEvent.orientation.x, 2);
-    posY = (getIMUEvent.orientation.y, 2);
-    posZ = (getIMUEvent.orientation.z, 2);
+    posX = (getIMUEvent.orientation.x);
+    posY = (getIMUEvent.orientation.y);
+    posZ = (getIMUEvent.orientation.z);
     uint8_t system, gyro, accel, mag = 0;
     bno.getCalibration(&system, &gyro, &accel, &mag);
     Serial.print("Calibration values:");
@@ -249,12 +241,10 @@ void loop()
     // Serial.print("Magnetometer");
     // Serial.print(mag, DEC);
 
-
-
     // TODO: There is a better way to do this with headers, but this will work for now
     // TODO: Do this with new string methods
-    sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
-    if(sensorDataFile.available())
+    sensorDataFile = SD.open("sensorData.csv");
+    if (sensorDataFile)
     {
       sensorDataFile.print(", currentIMUTime ,");
       sensorDataFile.print(currentIMUTime);
@@ -265,14 +255,15 @@ void loop()
       sensorDataFile.print("  posZ ,");
       sensorDataFile.print(posZ);
       sensorDataFile.print(" acceleration ,");
-      sensorDataFile.print(accel, DEC); 
+      sensorDataFile.print(accel, DEC);
 
       sensorDataFile.close();
     }
-    else{
+    else
+    {
       Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
     }
-  
+
     Serial.print("Current time between IMU Update:");
     Serial.print(IMUUpdateInterval);
     Serial.print("X axis: ");
@@ -281,13 +272,9 @@ void loop()
     Serial.print(posY);
     Serial.print("\tZ Axis: ");
     Serial.print(posZ);
-    Serial.print("=============================");
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
   }
-
-  
-
 
   /** This takes data from the enviromental sensor and writes it to a file as well as printing it to the terminal
    * Data collected includes:
@@ -317,8 +304,10 @@ void loop()
      * Pressure sensor reading/data
      * Altitude sensor reading/data
      */
-    sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
-    if(sensorDataFile.available()){
+    sensorDataFile = SD.open("sensorData.csv");
+    if (sensorDataFile)
+    {
+
       // TODO: There is a better way to do this with headers, but this will work for now
       sensorDataFile.print(", currentEnvTime ,");
       sensorDataFile.print(currentEnvTime);
@@ -329,11 +318,12 @@ void loop()
       sensorDataFile.print(", envAltitude ,");
       sensorDataFile.print(envAltitude);
       sensorDataFile.close();
-    } 
-    else{
-      Serial.print("Sensor data is unable to be written to a file. Please check wiring and pin assignments");
-
+      sensorDataFile.close();
     }
+    // else{
+    //   Serial.print("Sensor data is unable to be written to a file. Please check wiring and pin assignments");
+
+    // }
 
     Serial.print("Current time between Environmental sensor update");
     Serial.print(currentEnvTime);
@@ -345,4 +335,13 @@ void loop()
     Serial.print(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
     Serial.print(" meters");
   }
+}
+void driveMotorA(int speed, bool direction){
+  if (direction){
+    digitalWrite(bin1, HIGH);
+    digitalWrite(bin2, HIGH);
+  }
+}
+void stopMotor(){
+  analogWrite(PWMA, 0);
 }
