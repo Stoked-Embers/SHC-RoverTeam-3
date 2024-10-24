@@ -15,6 +15,7 @@
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BMP3XX.h"
 #include <Adafruit_BNO055.h>
+#include "SparkFun_TB6612.h"
 #include <utility/imumaths.h>
 #include <Servo.h>
 // #include <SparkFun_TB6612.h>
@@ -60,9 +61,25 @@ const int baseRotateOffset = 1;
 
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
-String receivedCommand = "";
 
+char receivedValues[];
+const byte numberOfChars = 32;
 File sensorDataFile;
+char endMarker = '\n';
+
+const int PWMA = 8;
+int bin1 = 6;
+int bin2 = 7;
+
+void driveMotorA(int speed, bool direction);
+
+
+
+
+
+
+
+
 void setup()
 {
   // put your setup code here, to run once:
@@ -92,6 +109,11 @@ void setup()
   pinMode(5, INPUT);  // SDA-BNO055- SDA = serial input to processor- confirm
 
   pinMode(40, OUTPUT); // Output to Libre
+
+  pinMode(PWMA, OUTPUT);
+  pinMode(bin1, OUTPUT);
+  pinMode(bin2, OUTPUT);
+
 
   // Set pin on the pico which the SD card is on, so we can save a file
   const int sdOutputPin = 17; // Actual pin on the pico is 22
@@ -177,15 +199,24 @@ void loop()
    * Check if serial active, then look for commands
    * Read the string until there is a new line - trim after a new line
    */
+  char receivedTempChar;
+  static byte ndx =0;
   if (Serial.available() > 0)
   {
-    receivedCommand = Serial.readStringUntil('\n');
-    receivedCommand.trim();
-    // TODO: Take a look at integrating serial reading for axis movement
-    if (receivedCommand.equals("X,-180"))
-    {
-      Serial.print("Test");
+    receivedTempChar = Serial.read();
+    if(receivedTempChar != endMarker){
+      receivedValues[ndx] = receivedTempChar;
+      ndx++;
+      if (ndx >= numberOfChars){
+        ndx = numberOfChars -1;
+      }
+      else { 
+        receivedValues[ndx]  = '\0';
+        ndx = 0;
+        Serial.print(receivedValues);
+      }
     }
+
   }
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
