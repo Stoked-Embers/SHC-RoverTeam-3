@@ -222,7 +222,7 @@ void loop()
   if(Serial.available() > 0){
     String command = Serial.readStringUntil('\n');
     command.trim();
-    int motorSpeed = command.toInt()
+    int motorSpeed = command.toInt();
   
     base.setSpeedPWMAndDirection(motorSpeed);
    
