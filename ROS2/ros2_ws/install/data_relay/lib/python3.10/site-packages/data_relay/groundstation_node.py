@@ -54,10 +54,10 @@ class TalkerNode(Node):
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and self.motor_speed > 0:
-                    self.motor_speed -= 5
+                    self.motor_speed -= 10
                     self.update_global_speed()
                 if event.key == pygame.K_RIGHT and self.motor_speed < 100:
-                    self.motor_speed += 5
+                    self.motor_speed += 10
                     self.update_global_speed()
 
         msg = String()
