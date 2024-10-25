@@ -160,7 +160,7 @@ class Ui_MainWindow(object):
         self.globalMotorSpeedSpinBox.setMinimum(-1)
         self.globalMotorSpeedSpinBox.setMaximum(100)
         self.globalMotorSpeedSpinBox.setObjectName("globalMotorSpeedSpinBox")
-        self.globalMotorSpeedSpinBox.setRange(0, 100)
+        self.globalMotorSpeedSpinBox.setRange(-100, 100)
         self.motorControlsLayout.addWidget(self.globalMotorSpeedSpinBox, 2, 0, 1, 1, QtCore.Qt.AlignHCenter)
         self.gridLayout_2.addLayout(self.motorControlsLayout, 0, 0, 2, 2)
         self.gridLayout.addWidget(self.motorControlsFrame, 0, 0, 1, 1)
@@ -491,7 +491,7 @@ class Ui_MainWindow(object):
 
     def update_joint_speeds(self):
         global_speed = self.globalMotorSpeedSpinBox.value()
-        self.globalMotorSpeedSpinBox.setRange(0, 100)
+        self.globalMotorSpeedSpinBox.setRange(-100, 100)
 
         #prevent triggering self.clear_global_speed
         self.baseSpinBox.blockSignals(True)
@@ -509,7 +509,7 @@ class Ui_MainWindow(object):
 
     def clear_global_speed(self):
         self.globalMotorSpeedSpinBox.blockSignals(True)
-        self.globalMotorSpeedSpinBox.setRange(-1, 100)
+        self.globalMotorSpeedSpinBox.setRange(-100, 100)
         self.globalMotorSpeedSpinBox.setValue(-1)
         self.globalMotorSpeedSpinBox.blockSignals(False)
 

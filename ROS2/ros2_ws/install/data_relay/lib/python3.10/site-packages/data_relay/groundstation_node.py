@@ -34,7 +34,8 @@ class TalkerNode(Node):
         self.listener_
 
         self.motor_speed = 0
-        self.create_timer(0.1, self.timer_callback)
+        self.selected_motor_speed = 0
+        self.create_timer(0.5, self.timer_callback)
     
     def start_ui(self):
         self.ui_thread = threading.Thread(target=self.run_ui)
@@ -54,7 +55,7 @@ class TalkerNode(Node):
 
     def update_global_speed(self):
         if self.ui and hasattr(self.ui, 'globalMotorSpeedSpinBox'):
-            QMetaObject.invokeMethod(self.ui.globalMotorSpeedSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.motor_speed))
+            QMetaObject.invokeMethod(self.ui.globalMotorSpeedSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.selected_motor_speed))
 
     def listener_callback(self, msg):
         self.get_logger().info(msg.data + "\n")
@@ -66,23 +67,33 @@ class TalkerNode(Node):
                 pygame.display.quit()
                 self.running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and self.motor_speed > 0:
-                    self.motor_speed -= 10
+                if event.key == pygame.K_LEFT and self.selected_motor_speed > 0:
+                    self.selected_motor_speed -= 10
                     self.update_global_speed()
-                if event.key == pygame.K_RIGHT and self.motor_speed < 100:
-                    self.motor_speed += 10
+                if event.key == pygame.K_RIGHT and self.selected_motor_speed< 100:
+                    self.selected_motor_speed += 10
                     self.update_global_speed()
-        if self.joystick.get_button(1) and self.motor_speed < 100:
-            self.motor_speed += 5
+
+            if event.type == pygame.JOYAXISMOTION:
+                self.x_axis = self.joystick.get_axis(0)
+                if self.x_axis < -0.5:
+                    self.motor_speed = -(self.selected_motor_speed)
+                elif self.x_axis > 0.5:
+                    self.motor_speed = (self.selected_motor_speed)
+                else:
+                    self.motor_speed = 0
+
+        if self.joystick.get_button(1) and self.selected_motor_speed < 100:
+            self.selected_motor_speed += 10
             self.update_global_speed()
-        if self.joystick.get_button(2) and self.motor_speed > 0:
-            self.motor_speed -= 5
+        if self.joystick.get_button(3) and self.selected_motor_speed > 0:
+            self.selected_motor_speed -= 10
             self.update_global_speed()
 
         msg = String()
-        msg.data = str(self.motor_speed)
+        msg.data = str(f"{self.motor_speed}")
         self.publisher_.publish(msg)
-        self.get_logger().info("Publishing: " + msg.data)
+        self.get_logger().info(msg.data)
 
 def main(args=None):
     rclpy.init(args=args)       # Initializes ROS2 communications & features
