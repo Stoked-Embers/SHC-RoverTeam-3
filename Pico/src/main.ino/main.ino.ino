@@ -61,7 +61,7 @@ double posZ = 0.0;
 const int basePitchOffset = 1;
 const int baseRotateOffset = 1;
 
-PWMDcMotor base;
+PWMDcMotor baseMotor;
 
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
@@ -79,12 +79,15 @@ const int speed = 5;
 
 void driveMotorA(int speed, bool direction);
 
+int motorSpeed = 0;
+
+
 void setup()
 {
   // put your setup code here, to run once:
 
   Serial.begin(9600); // Begin broadcasting/receiving over serial on a baud rate of 9600
-  base.init(6,7,8);
+  baseMotor.init(6, 7, 8);
 
   // Set up pins for digital input and output- for help refer to the "Resources" folder for the schematic
   // Using pins 1-6 for servo output.
@@ -171,7 +174,9 @@ void setup()
   bno.setExtCrystalUse(true); //? What is this? Something to do with accuracy of measurements?
   // TODO: Take a look at the crystal
   // sensorDataFile = SD.open("sensorData.txt");
+
 }
+
 
 void loop()
 {
@@ -181,10 +186,10 @@ void loop()
   // ! Temporary IMU Output for testing purposes
   // TODO: This is just temporary for testing- able to display values from the IMU, but are not truly readable and able to be interpreted.
   // TODO: Going with 2 decimal places at this time. Determine if we need to change this
-  digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
-  delay(1000);                      // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
-  delay(1000);     
+  // digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+  // delay(1000);                      // wait for a second
+  // digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+  // delay(1000);     
   unsigned long currentIMUTime = millis(); // Get the current time in milliseconds
 
   /**Serial communication
@@ -219,16 +224,13 @@ void loop()
   //     }
   //   }
   // }
-  if(Serial.available() > 0){
+if(Serial.available() > 0){
     String command = Serial.readStringUntil('\n');
     command.trim();
-    int motorSpeed = command.toInt();
-  
-    base.setSpeedPWMAndDirection(motorSpeed);
-   
-    
+    motorSpeed = command.toInt();
+    Serial.println(motorSpeed);
+    baseMotor.setSpeedPWMAndDirection(motorSpeed);
   }
-
   /** This section collects IMU data and writes it to a file. Data collected includes:
    * X axis orientation
    * Y axis orientation
