@@ -56,10 +56,6 @@ double posX = 0.0;
 double posY = 0.0;
 double posZ = 0.0;
 
-double accelX = 0.0;
-double accelY = 0.0;
-double accelZ = 0.0;
-
 const int basePitchOffset = 1;
 const int baseRotateOffset = 1;
 
@@ -114,7 +110,7 @@ void setup()
   pinMode(bin2, OUTPUT);
 
   // Set pin on the pico which the SD card is on, so we can save a file
-  const int sdOutputPin = 17; // Actual pin on the pico is 22
+  const int sdOutputPin = 17; // Actual pin on the pico is 24
 
   /**Servo initialization
    * https://docs.arduino.cc/libraries/servo/
@@ -137,27 +133,33 @@ void setup()
   if (!SD.begin(17))
   {
     Serial.println("initialization failed!");
-    while (1);
+    while (1)
+      ;
   }
+  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+
+
   Serial.println("initialization done.");
 
   // Check that we are receiving input from the BMP 388, print error message if not
   if (!bmp.begin_I2C())
   {
     Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
-    while (1); // Throw
+    while (1)
+      ; // Throw
   }
   if (!bno.begin())
   {
     Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
-    while (1);
+    while (1)
+      ;
   }
   // Throw if the SD card cant be written to
-  if (!SD.begin(sdOutputPin))
-  {
-    Serial.println("SD card initialization failed. Please check the wiring and ensure that pins are initialized correctly in software.");
-    return;
-  }
+  // if (!SD.begin(sdOutputPin))
+  // {
+  //   Serial.println("SD card initialization failed. Please check the wiring and ensure that pins are initialized correctly in software.");
+  //   return;
+  // }
 
   // TODO: Tune this - currently based off of the example code: https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
   // TODO: Figure out what different sampling configs do
@@ -168,13 +170,13 @@ void setup()
 
   bno.setExtCrystalUse(true); //? What is this? Something to do with accuracy of measurements?
   // TODO: Take a look at the crystal
+  // sensorDataFile = SD.open("sensorData.txt");
 }
 
 void loop()
 {
   // put your main code here, to run repeatedly:
   // Set up SD card for writing
-  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
 
   // ! Temporary IMU Output for testing purposes
   // TODO: This is just temporary for testing- able to display values from the IMU, but are not truly readable and able to be interpreted.
@@ -204,7 +206,7 @@ void loop()
       }
       else
       {
-        // TODO: Confirm this works 
+        // TODO: Confirm this works
         receivedValues[ndx] = '\0';
         ndx = 0;
         char receivedValues = 'value';
@@ -225,8 +227,7 @@ void loop()
    */
 
   // TODO: Need to add acceleration to the file writing and to the serial output as well
-  if (currentIMUTime - IMUCheckTimeElapsed >= IMUUpdateInterval)
-  {
+
     imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
@@ -242,34 +243,26 @@ void loop()
     // Serial.print(gyro, DEC);
     Serial.print("Acceleration");
     Serial.print(accel, DEC);
-    accelX =(getIMUEvent.acceleration.x);
-    accelY = (getIMUEvent.acceleration.y);
-    accelZ = (getIMUEvent.acceleration.z);
     // Serial.print("Magnetometer");
     // Serial.print(mag, DEC);
 
     // TODO: There is a better way to do this with headers, but this will work for now
     // TODO: Do this with new string methods
-    sensorDataFile = SD.open("sensorData.csv");
+    sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
     if (sensorDataFile)
     {
-      sensorDataFile.print(", currentIMUTime ,");
-      sensorDataFile.print(currentIMUTime);
-      sensorDataFile.print("  posX ,");
-      sensorDataFile.print(posX);
-      sensorDataFile.print("  posY ,");
-      sensorDataFile.print(posY);
-      sensorDataFile.print("  posZ ,");
-      sensorDataFile.print(posZ);
-      sensorDataFile.print(" acceleration X,");
-      sensorDataFile.print(accelX);
-      sensorDataFile.print(" acceleration Y,");
-      sensorDataFile.print(accelY);
-      sensorDataFile.print(" acceleration Z,");
-      sensorDataFile.print(accelZ);
-      sensorDataFile.print("\n");
+      sensorDataFile.println(", currentIMUTime ,");
+      sensorDataFile.println(currentIMUTime);
+      sensorDataFile.println("  posX ,");
+      sensorDataFile.println(posX);
+      sensorDataFile.println("  posY ,");
+      sensorDataFile.println(posY);
+      sensorDataFile.println("  posZ ,");
+      sensorDataFile.println(posZ);
+      sensorDataFile.println(" acceleration ,");
+      sensorDataFile.println(accel, DEC);
 
-      sensorDataFile.close();
+      
     }
     else
     {
@@ -280,22 +273,13 @@ void loop()
     Serial.print(IMUUpdateInterval);
     Serial.print("X axis: ");
     Serial.print(posX);
-    Serial.print("Y axis: ");
+    Serial.print("\tY axis: ");
     Serial.print(posY);
-    Serial.print("Z Axis: ");
+    Serial.print("\tZ Axis: ");
     Serial.print(posZ);
-    Serial.print("Accel X");
-    Serial.print(accelX);
-    Serial.print("Accel Y");
-    Serial.print(accelY);
-    Serial.print("Accel Z");
-    Serial.print(accelZ);
-    
-
-    
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
-  }
+  
 
   /** This takes data from the enviromental sensor and writes it to a file as well as printing it to the terminal
    * Data collected includes:
@@ -313,8 +297,7 @@ void loop()
 
   unsigned long currentEnvTime = millis(); // Get the current time in milliseconds- could this possibly be merged into the main function
 
-  if (currentEnvTime - EnvCheckTimeElapsed >= EnvUpdateInterval)
-  {
+
     envTemp = bmp.temperature;
     envPressure = bmp.pressure / 100;
     envAltitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
@@ -325,21 +308,19 @@ void loop()
      * Pressure sensor reading/data
      * Altitude sensor reading/data
      */
-    sensorDataFile = SD.open("sensorData.csv");
+
     if (sensorDataFile)
     {
 
       // TODO: There is a better way to do this with headers, but this will work for now
-      sensorDataFile.print(", currentEnvTime ,");
-      sensorDataFile.print(currentEnvTime);
-      sensorDataFile.print(", envTemp ,");
-      sensorDataFile.print(envTemp);
-      sensorDataFile.print(", envPressure ,");
-      sensorDataFile.print(envPressure);
-      sensorDataFile.print(", envAltitude ,");
-      sensorDataFile.print(envAltitude);
-      sensorDataFile.print("\n");
-      sensorDataFile.close();
+      sensorDataFile.println(", currentEnvTime ,");
+      sensorDataFile.println(currentEnvTime);
+      sensorDataFile.println(", envTemp ,");
+      sensorDataFile.println(envTemp);
+      sensorDataFile.println(", envPressure ,");
+      sensorDataFile.println(envPressure);
+      sensorDataFile.println(", envAltitude ,");
+      sensorDataFile.println(envAltitude);
       
     }
     // else{
@@ -356,14 +337,17 @@ void loop()
     Serial.print("Altitude:");
     Serial.print(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
     Serial.print(" meters");
-  }
+  
 }
-void driveMotorA(int speed, bool direction){
-  if (direction){
+void driveMotorA(int speed, bool direction)
+{
+  if (direction)
+  {
     digitalWrite(bin1, HIGH);
     digitalWrite(bin2, HIGH);
   }
 }
-void stopMotor(){
+void stopMotor()
+{
   analogWrite(PWMA, 0);
 }
