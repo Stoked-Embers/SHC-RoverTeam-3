@@ -28,16 +28,11 @@ class SerialRelay(Node):
     
     def send(self, msg):
         self.get_logger().info('recieved input: "%"' % msg.data)
-        try:
-            speed, direction = msg.data.split(',')
-            command = f"{speed},{direction}"
-            # Send command to pico
-            self.ser.write(bytes(command, "utf8"))
-            #print(f"[Sys] Relaying: {command}")
-            self.ser.flush()       # sends out data immediately
-        except:
-            self.get_logger().info('ERROR: Recieved bad input format')
-
+        command = msg.data
+        # Send command to pico
+        self.ser.write(bytes(command, "utf8"))
+        #print(f"[Sys] Relaying: {command}")
+        self.ser.flush()       # sends out data immediately
     
         
 
