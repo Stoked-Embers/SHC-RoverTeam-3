@@ -219,12 +219,12 @@ void loop()
   //     }
   //   }
   // }
-  if(Serial.available()){
+  if(Serial.available() > 0){
     String command = Serial.readStringUntil('\n');
     command.trim();
-
+    int motorSpeed = command.toInt()
   
-    base.setSpeedPWMAndDirection(command.toInt());
+    base.setSpeedPWMAndDirection(motorSpeed);
    
     
   }
