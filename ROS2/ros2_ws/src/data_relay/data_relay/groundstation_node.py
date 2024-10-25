@@ -7,6 +7,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QMetaObject, Qt, Q_ARG
 from data_relay.groundstation import Ui_MainWindow
+from pygame.locals import *
 
 from std_msgs.msg import String
 
@@ -18,11 +19,20 @@ class TalkerNode(Node):
         pygame.init()
         pygame.display.init()
         screen = pygame.display.set_mode((1,1), pygame.NOFRAME)
+
+        
+        self.joystick = pygame.joystick.Joystick(0)
+
         self.running = True
 
         self.ui = ui
 
         self.publisher_ = self.create_publisher(String, '/pico/command', 10)
+
+        self.listener_ = self.create_subscription(
+            String, '/pico/output', self.listener_callback, 10)
+        self.listener_
+
         self.motor_speed = 0
         self.create_timer(0.1, self.timer_callback)
     
@@ -46,6 +56,9 @@ class TalkerNode(Node):
         if self.ui and hasattr(self.ui, 'globalMotorSpeedSpinBox'):
             QMetaObject.invokeMethod(self.ui.globalMotorSpeedSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.motor_speed))
 
+    def listener_callback(self, msg):
+        self.get_logger().info(msg.data + "\n")
+
     def timer_callback(self):
         events = pygame.event.get()
         for event in events:
@@ -59,6 +72,12 @@ class TalkerNode(Node):
                 if event.key == pygame.K_RIGHT and self.motor_speed < 100:
                     self.motor_speed += 10
                     self.update_global_speed()
+        if self.joystick.get_button(1) and self.motor_speed < 100:
+            self.motor_speed += 5
+            self.update_global_speed()
+        if self.joystick.get_button(2) and self.motor_speed > 0:
+            self.motor_speed -= 5
+            self.update_global_speed()
 
         msg = String()
         msg.data = str(self.motor_speed)
