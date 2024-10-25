@@ -33,8 +33,6 @@ class SerialRelay(Node):
         self.ser.write(bytes(command, "utf8"))
             #print(f"[Sys] Relaying: {command}")
         self.ser.flush()       # sends out data immediately
-
-    
         
 
 def main(args=None):
