@@ -17,6 +17,8 @@
 #include <Adafruit_BNO055.h>
 #include "SparkFun_TB6612.h"
 #include <utility/imumaths.h>
+#include "PWMDcMotor.hpp"
+#include "RobotCarPinDefinitionsAndMore.h"
 #include <Servo.h>
 // #include <SparkFun_TB6612.h>
 
@@ -59,6 +61,8 @@ double posZ = 0.0;
 const int basePitchOffset = 1;
 const int baseRotateOffset = 1;
 
+PWMDcMotor base;
+
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
 
@@ -80,7 +84,7 @@ void setup()
   // put your setup code here, to run once:
 
   Serial.begin(9600); // Begin broadcasting/receiving over serial on a baud rate of 9600
-
+  base.init(6,7,8);
 
   // Set up pins for digital input and output- for help refer to the "Resources" folder for the schematic
   // Using pins 1-6 for servo output.
@@ -219,12 +223,9 @@ void loop()
     String command = Serial.readStringUntil('\n');
     command.trim();
 
-    if(command == "50"){
-      driveMotorA(command.toInt(), true);
-    }
-    if(command == "0"){
-      driveMotorA(command.toInt(), true);
-    }
+  
+    base.setSpeedPWMAndDirection(command.toInt());
+   
     
   }
 
