@@ -37,7 +37,7 @@
 
 // ! This is really hard to visualize without looking at real HW
 
-Adafruit_BNO055 bno = Adafruit_BNO055(28);
+Adafruit_BNO055 bno = Adafruit_BNO055(55);
 #define SEALEVELPRESSURE_HPA (1013.25) // TODO: Does this value need to be tuned
 
 Adafruit_BMP3XX bmp;
@@ -147,11 +147,11 @@ void setup()
   Serial.println("initialization done.");
 
   // Check that we are receiving input from the BMP 388, print error message if not
-  if (!bmp.begin_I2C())
-  {
-    Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
+  // if (!bmp.begin_I2C())
+  // {
+  //   Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
    
-  }
+  // }
   if (!bno.begin())
   {
     Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
