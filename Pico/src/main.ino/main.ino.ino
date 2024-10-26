@@ -226,14 +226,14 @@ void loop()
   // }
 
   //maybe add back
-// if(Serial.available() > 0){
-//     String command = Serial.readStringUntil('\n');
-//     command.trim();
-//     motorSpeed = command.toInt();
-//     Serial.println(motorSpeed);
+if(Serial.available() > 0){
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+    motorSpeed = command.toInt();
+    Serial.println(motorSpeed);
     
-//     baseMotor.setSpeedPWMAndDirection(motorSpeed);
-//   }
+    baseMotor.setSpeedPWMAndDirection(motorSpeed);
+  }
 
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
@@ -254,9 +254,14 @@ void loop()
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
 
-    posX = (getIMUEvent.orientation.x);
-    posY = (getIMUEvent.orientation.y);
-    posZ = (getIMUEvent.orientation.z);
+    // posX = (getIMUEvent.orientation.x);
+   //  posY = (getIMUEvent.orientation.y);
+    // posZ = (getIMUEvent.orientation.z);
+      posX = euler.x();
+      posY = euler.y();
+      posZ = euler.z();
+
+
     uint8_t system, gyro, accel, mag = 0;
     bno.getCalibration(&system, &gyro, &accel, &mag);
     Serial.print("Calibration values:");
