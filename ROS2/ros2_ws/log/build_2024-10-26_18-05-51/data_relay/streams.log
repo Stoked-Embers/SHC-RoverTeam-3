@@ -1,0 +1,26 @@
+[0.972s] Invoking command in '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/src/data_relay': PYTHONPATH=/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/data_relay build --build-base /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/build install --record /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/install.log --single-version-externally-managed install_data
+[1.316s] running egg_info
+[1.316s] writing ../../build/data_relay/data_relay.egg-info/PKG-INFO
+[1.317s] writing dependency_links to ../../build/data_relay/data_relay.egg-info/dependency_links.txt
+[1.318s] writing entry points to ../../build/data_relay/data_relay.egg-info/entry_points.txt
+[1.318s] writing requirements to ../../build/data_relay/data_relay.egg-info/requires.txt
+[1.318s] writing top-level names to ../../build/data_relay/data_relay.egg-info/top_level.txt
+[1.321s] reading manifest file '../../build/data_relay/data_relay.egg-info/SOURCES.txt'
+[1.323s] writing manifest file '../../build/data_relay/data_relay.egg-info/SOURCES.txt'
+[1.323s] running build
+[1.323s] running build_py
+[1.323s] running install
+[1.324s] running install_lib
+[1.326s] running install_data
+[1.326s] running install_egg_info
+[1.329s] removing '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay-0.0.0-py3.10.egg-info' (and everything under it)
+[1.329s] Copying ../../build/data_relay/data_relay.egg-info to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages/data_relay-0.0.0-py3.10.egg-info
+[1.331s] running install_scripts
+[1.363s] Installing groundstation_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+[1.364s] Installing listener_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+[1.364s] Installing motor_talker script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+[1.364s] Installing pygame_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+[1.365s] Installing relay_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+[1.365s] Installing talker_node script to /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/data_relay
+[1.365s] writing list of installed files to '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/install.log'
+[1.394s] Invoked command in '/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/src/data_relay' returned '0': PYTHONPATH=/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/install/data_relay/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/data_relay build --build-base /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/build install --record /home/wyatt/Documents/GitHub/SHC-RoverTeam-3/ROS2/ros2_ws/build/data_relay/install.log --single-version-externally-managed install_data
