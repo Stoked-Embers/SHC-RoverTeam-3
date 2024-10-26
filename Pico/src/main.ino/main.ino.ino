@@ -37,7 +37,7 @@
 
 // ! This is really hard to visualize without looking at real HW
 
-Adafruit_BNO055 bno = Adafruit_BNO055(55);
+Adafruit_BNO055 bno = Adafruit_BNO055(28);
 #define SEALEVELPRESSURE_HPA (1013.25) // TODO: Does this value need to be tuned
 
 Adafruit_BMP3XX bmp;
@@ -103,11 +103,11 @@ void setup()
   pinMode(12, OUTPUT);
 
   // TODO: Double check the pin assignment on this
-  pinMode(4, INPUT);  // SDA-BMP388- SDA = serial input to processor- confirm
-  pinMode(5, OUTPUT); // SCL-BMP388
+  //pinMode(4, INPUT);  // SDA-BMP388- SDA = serial input to processor- confirm
+  //pinMode(5, OUTPUT); // SCL-BMP388
 
-  pinMode(4, OUTPUT); // SCL-BNO055
-  pinMode(5, INPUT);  // SDA-BNO055- SDA = serial input to processor- confirm
+  //pinMode(4, OUTPUT); // SCL-BNO055
+  //pinMode(5, INPUT);  // SDA-BNO055- SDA = serial input to processor- confirm
 
   pinMode(40, OUTPUT); // Output to Libre
 
@@ -141,7 +141,7 @@ void setup()
     Serial.println("initialization failed!");
   
   }
-  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+  sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 
 
   Serial.println("initialization done.");
@@ -224,13 +224,18 @@ void loop()
   //     }
   //   }
   // }
-if(Serial.available() > 0){
-    String command = Serial.readStringUntil('\n');
-    command.trim();
-    motorSpeed = command.toInt();
-    Serial.println(motorSpeed);
-    baseMotor.setSpeedPWMAndDirection(motorSpeed);
-  }
+
+  //maybe add back
+// if(Serial.available() > 0){
+//     String command = Serial.readStringUntil('\n');
+//     command.trim();
+//     motorSpeed = command.toInt();
+//     Serial.println(motorSpeed);
+    
+//     baseMotor.setSpeedPWMAndDirection(motorSpeed);
+//   }
+
+
   /** This section collects IMU data and writes it to a file. Data collected includes:
    * X axis orientation
    * Y axis orientation
@@ -241,7 +246,10 @@ if(Serial.available() > 0){
    */
 
   // TODO: Need to add acceleration to the file writing and to the serial output as well
-
+    if (!bno.begin())
+    {
+      Serial.println("Shit no bno");
+    }
     imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
@@ -262,11 +270,11 @@ if(Serial.available() > 0){
 
     // TODO: There is a better way to do this with headers, but this will work for now
     // TODO: Do this with new string methods
-    sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+    sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
     if (sensorDataFile)
     {
-      sensorDataFile.println(", currentIMUTime ,");
-      sensorDataFile.println(currentIMUTime);
+      // sensorDataFile.println(", currentIMUTime ,");
+      // sensorDataFile.println(currentIMUTime);
       sensorDataFile.println("  posX ,");
       sensorDataFile.println(posX);
       sensorDataFile.println("  posY ,");
@@ -283,14 +291,14 @@ if(Serial.available() > 0){
       Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
     }
 
-    Serial.print("Current time between IMU Update:");
-    Serial.print(IMUUpdateInterval);
-    Serial.print("X axis: ");
-    Serial.print(posX);
-    Serial.print("\tY axis: ");
-    Serial.print(posY);
-    Serial.print("\tZ Axis: ");
-    Serial.print(posZ);
+    // Serial.print("Current time between IMU Update:");
+    // Serial.print(IMUUpdateInterval);
+    Serial.println("X axis: ");
+    Serial.println(posX);
+    Serial.println("Y axis: ");
+    Serial.println(posY);
+    Serial.println("Z Axis: ");
+    Serial.println(posZ);
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
   
@@ -303,7 +311,7 @@ if(Serial.available() > 0){
    * current altitude ( a derivative of pressure)
    */
 
-  if (!bmp.performReading())
+  if (!bmp.begin_I2C())
   {
     Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
     return;
