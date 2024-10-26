@@ -86,6 +86,7 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   // pinMode(0, OUTPUT); // High Torque Servo Miuzei - Commented this out because we are attaching a servo. 
   
+  
   // Attach the base servo (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
   basePitchServo.attach(0,700, 2000); 
   // Attach the middle servo (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
@@ -120,17 +121,7 @@ void setup()
   // Set pin on the pico which the SD card is on, so we can save a file
   const int sdOutputPin = 17; // Actual pin on the pico is 24
 
-  /**Servo initialization
-   * https://docs.arduino.cc/libraries/servo/
-   * baseRotationServo - 1st servo, controls rotation of the arm base
-   * basePitchServo - 2nd servo from the bottom, used to control pitch of the arm
-   * midPitchServo - 3rd servo from the bottom, controls the pitch of the portion of the arm with the end effector
-   * wristPitchServo - 4th servo from the bottom, controls the pitch of the wrist
-   * clawServo - 5th servo from the bottom, controls the closing and opening action of the claw
-   * base is GM3 motor/ servo
-   * axis 1 is 25 kg
-   * all other axis are basic servos
-   */
+  
 
 
 
@@ -174,7 +165,7 @@ void setup()
 
   bno.setExtCrystalUse(true); //? What is this? Something to do with accuracy of measurements?
   // TODO: Take a look at the crystal
-  // sensorDataFile = SD.open("sensorData.txt");
+ 
 
 }
 
@@ -200,31 +191,7 @@ void loop()
    * Check if serial active, then look for commands
    * Read the string until there is a new line - trim after a new line
    */
-  // char receivedTempChar;
-  // static byte ndx = 0;
-  // if (Serial.available() > 0)
-  // {
-  //   receivedTempChar = Serial.read();
-  //   if (receivedTempChar != endMarker)
-  //   {
-  //     receivedValues[ndx] = receivedTempChar;
-  //     ndx++;
-  //     if (ndx >= numberOfChars)
-  //     {
-  //       ndx = numberOfChars - 1;
-  //     }
-  //     else
-  //     {
-  //       // TODO: Confirm this works
-  //       receivedValues[ndx] = '\0';
-  //       ndx = 0;
-  //       char receivedValues = 'value';
-  //       int motorPosition = receivedValues;
-  //       Serial.print(motorPosition);
-  //       driveMotorA(motorPosition, false);
-  //     }
-  //   }
-  // }
+ 
 
   //maybe add back
 // if(Serial.available() > 0){
