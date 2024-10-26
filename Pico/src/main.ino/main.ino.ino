@@ -243,6 +243,7 @@ void loop()
   // TODO: Need to add acceleration to the file writing and to the serial output as well
   
   if(lastSensorUpdate - sensorUpdateInterval >= 0){
+		digitalWrite(LED_BUILTIN, HIGH);
 		imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
 		sensors_event_t getIMUEvent;
 		bno.getEvent(&getIMUEvent);
@@ -350,6 +351,7 @@ void loop()
 		Serial.println("Altitude:");
 		Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
 		Serial.println(" meters");
+		digitalWrite(LED_BUILTIN, LOW);	
   }
 }
 void driveMotorA(int speed, bool direction)
