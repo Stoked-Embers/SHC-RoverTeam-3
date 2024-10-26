@@ -47,7 +47,7 @@ double posZ = 0.0;
 const int basePitchOffset = 1;
 const int baseRotateOffset = 1;
 
-PWMDcMotor baseMotor;
+PWMDcMotor basePitchMotor;
 
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
@@ -72,12 +72,16 @@ Servo midPitchServo:
 Servo endPitchServo;
 Servo endEffectorGrabServo;
 
+String motorAssignment;
+String motorSpeedAssignmentUnfiltered;
+String motorSpeedAssignment;
+
 void setup()
 {
   // put your setup code here, to run once:
 
   Serial.begin(9600); // Begin broadcasting/receiving over serial on a baud rate of 9600
-  baseMotor.init(6, 7, 8);
+  basePitchMotor.init(6, 7, 8);
 
   // Set up pins for digital input and output- for help refer to the "Resources" folder for the schematic
   // Using pins 1-6 for servo output.
@@ -192,15 +196,39 @@ void loop()
    */
  
 
-  //maybe add back
-if(Serial.available() > 0){
-    String command = Serial.readStringUntil('\n');
-    command.trim();
-    motorSpeed = command.toInt();
-    Serial.println(motorSpeed);
-    
-    baseMotor.setSpeedPWMAndDirection(motorSpeed);
-  }
+	 
+	if(Serial.available() > 0){
+		String command = Serial.readStringUntil('\n');
+		command.trim();
+		motorAssignment = command.substring(0,3);
+		motorSpeedAssignmentUnfiltered = command.substring(4,8)
+		
+		
+		
+		Serial.println(motorSpeed);
+		motorSpeedAssignment = motorSpeedAssignmentUnfiltered.erase(remove(motorSpeedAssignment.begin(), motorSpeedAssignment.end(), ' '), motorSpeedAssignment.end());
+		motorSpeedAssignment = command.toInt();
+		
+		if(motorAssignment == "mor0"){
+			// Checks that the value passed in is between the rotation limits of the motor. If it does not, then print an error to serial and do not execute the movement command
+			if(motorSpeedAssignment >= 0 && motorSpeed =< 180){
+				basePitchMotor.setSpeedPWMAndDirection(motorSpeedAssignment);
+			}
+			else{
+				Serial.print("The value provided does not fit within the range of 0 degrees to 180 degrees. Therefore, the command has not been sent to the motor. Please try another value.");
+			}
+		}
+		else if(motorAssignment == "ser1"){
+			midPitchServo.write(motorSpeedAssignment);	
+		}
+		else if(motorAssignment == "ser2"){
+			endPitchServo.write(motorSpeedAssignment);
+		}
+		else if(motorAssignment == "ser3"){
+			endEffectorGrabServo.write(motorSpeedAssignment);	
+		}
+		
+	  }
 
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
