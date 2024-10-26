@@ -1,14 +1,5 @@
 #include <Arduino.h>
 
-/**These are inputs fro the BMP388 (Environment sensor) and BNO (orientation/IMU)
- *  https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code
- * https://learn.adafruit.com/adafruit-bmp388-bmp390-bmp3xx?view=all#spi-logic-pins-3022081
- * It is necessary to add the libraries to Platform IO in order to be able to build correctly
- *
- *
- *
- * */
-
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
@@ -20,7 +11,7 @@
 #include "PWMDcMotor.hpp"
 #include "RobotCarPinDefinitionsAndMore.h"
 #include <Servo.h>
-// #include <SparkFun_TB6612.h>
+
 
 // TODO: Double check these
 // #define BMP_SCK 13
@@ -31,11 +22,7 @@
 #define BIN1 9
 #define BIN2 10
 #define STBY 41
-/**Notes for tb6612 driver
- * https://electropeak.com/learn/interfacing-tb6612fng-dual-motor-driver-module-with-arduino/#google_vignette
- */
 
-// ! This is really hard to visualize without looking at real HW
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 #define SEALEVELPRESSURE_HPA (1013.25) // TODO: Does this value need to be tuned
@@ -53,7 +40,7 @@ double envTemp = 0.0;
 double envPressure = 0.0;
 double envAltitude = 0.0;
 
-// Declare vars for IMU sensor in preperation for writing values to a file
+// Declare vars for IMU sensor in preparation for writing values to a file
 double posX = 0.0;
 double posY = 0.0;
 double posZ = 0.0;
@@ -81,6 +68,10 @@ void driveMotorA(int speed, bool direction);
 
 int motorSpeed = 0;
 
+Servo basePitchServo;
+Servo midPitchServo:
+Servo endPitchServo;
+Servo endEffectorGrabServo;
 
 void setup()
 {
@@ -93,10 +84,21 @@ void setup()
   // Using pins 1-6 for servo output.
   //! Pin 3 is GROUND- Do not assign something to this
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(0, OUTPUT); // High Torque Servo Miuzei
-  pinMode(1, OUTPUT); // Grab — MGT Servo
-  pinMode(2, OUTPUT); // Rotation MGT-Servo
+  // pinMode(0, OUTPUT); // High Torque Servo Miuzei - Commented this out because we are attaching a servo. 
+  
+  // Attach the base servo (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
+  basePitchServo.attach(0,700, 2000); 
+  // Attach the middle servo (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
+  midPitchServo.attach(1,700, 2000);
+  // Attach the end effector pitch servo to pin 2 (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
+  endPitchServo.attach(2,700, 2000);
+  // Attach the end effector pitch servo to pin 3 (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
+  endEffectorGrabServo.attach(3,700,2000);
+  // pinMode(1, OUTPUT); // Grab — MGT Servo
+  // pinMode(2, OUTPUT); // Rotation MGT-Servo
   // pinMode(3, OUTPUT); // PWMA Driver - Is this an input?
+  
+  
   pinMode(8, OUTPUT); // PWMB Driver- Are these actually inputs- difficult to tell from the diagram
 
   pinMode(11, INPUT); // These are the GPIO pins - 11 and 12
@@ -130,17 +132,16 @@ void setup()
    * all other axis are basic servos
    */
 
-  Servo midPitchServo;
-  Servo wristPitchServo;
-  Servo clawServo;
 
-  // This should create a file if it does not exist
+
+  
 
   if (!SD.begin(17))
   {
     Serial.println("initialization failed!");
   
   }
+  // This should create a file if it does not exist. NOTE: Keep the file write command in the loop. It does not overwrite the file, but opens it and write data to it.
   sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 
 
@@ -246,10 +247,6 @@ void loop()
    */
 
   // TODO: Need to add acceleration to the file writing and to the serial output as well
-    if (!bno.begin())
-    {
-      Serial.println("Shit no bno");
-    }
     imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
@@ -275,14 +272,14 @@ void loop()
     {
       // sensorDataFile.println(", currentIMUTime ,");
       // sensorDataFile.println(currentIMUTime);
-      sensorDataFile.println("  posX ,");
-      sensorDataFile.println(posX);
-      sensorDataFile.println("  posY ,");
-      sensorDataFile.println(posY);
-      sensorDataFile.println("  posZ ,");
-      sensorDataFile.println(posZ);
-      sensorDataFile.println(" acceleration ,");
-      sensorDataFile.println(accel, DEC);
+      sensorDataFile.print"posX ,");
+      sensorDataFile.print(posX);
+      sensorDataFile.print("posY ,");
+      sensorDataFile.print(posY);
+      sensorDataFile.print("posZ ,");
+      sensorDataFile.print(posZ);
+      sensorDataFile.print("acceleration ,");
+      sensorDataFile.print(accel, DEC);
 
       
     }
@@ -335,14 +332,14 @@ void loop()
     {
 
       // TODO: There is a better way to do this with headers, but this will work for now
-      sensorDataFile.println(", currentEnvTime ,");
-      sensorDataFile.println(currentEnvTime);
-      sensorDataFile.println(", envTemp ,");
-      sensorDataFile.println(envTemp);
-      sensorDataFile.println(", envPressure ,");
-      sensorDataFile.println(envPressure);
-      sensorDataFile.println(", envAltitude ,");
-      sensorDataFile.println(envAltitude);
+      sensorDataFile.print("currentEnvTime ,");
+      sensorDataFile.print(currentEnvTime);
+      sensorDataFile.print("envTemp ,");
+      sensorDataFile.print(envTemp);
+      sensorDataFile.print("envPressure ,");
+      sensorDataFile.print(envPressure);
+      sensorDataFile.print("envAltitude ,");
+      sensorDataFile.print(envAltitude);
       
     }
     // else{
@@ -350,15 +347,15 @@ void loop()
 
     // }
 
-    Serial.print("Current time between Environmental sensor update");
-    Serial.print(currentEnvTime);
-    Serial.print(" Celsius");
-    Serial.print(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
-    Serial.print("Pressure");
-    Serial.print(envPressure); // TODO: This is in HPA. Do we want that?
-    Serial.print("Altitude:");
-    Serial.print(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
-    Serial.print(" meters");
+    Serial.println("Current time between Environmental sensor update");
+    Serial.println(currentEnvTime);
+    Serial.println(" Celsius");
+    Serial.println(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
+    Serial.println("Pressure");
+    Serial.println(envPressure); // TODO: This is in HPA. Do we want that?
+    Serial.println("Altitude:");
+    Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
+    Serial.println(" meters");
   
 }
 void driveMotorA(int speed, bool direction)

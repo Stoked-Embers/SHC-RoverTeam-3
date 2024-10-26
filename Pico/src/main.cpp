@@ -246,10 +246,7 @@ void loop()
    */
 
   // TODO: Need to add acceleration to the file writing and to the serial output as well
-    if (!bno.begin())
-    {
-      Serial.println("Shit no bno");
-    }
+
     imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
     sensors_event_t getIMUEvent;
     bno.getEvent(&getIMUEvent);
@@ -275,13 +272,13 @@ void loop()
     {
       // sensorDataFile.println(", currentIMUTime ,");
       // sensorDataFile.println(currentIMUTime);
-      sensorDataFile.println("  posX ,");
-      sensorDataFile.println(posX);
-      sensorDataFile.println("  posY ,");
-      sensorDataFile.println(posY);
-      sensorDataFile.println("  posZ ,");
+      sensorDataFile.print("posX ,");
+      sensorDataFile.print(posX);
+      sensorDataFile.print("posY ,");
+      sensorDataFile.print(posY);
+      sensorDataFile.println("posZ ,");
       sensorDataFile.println(posZ);
-      sensorDataFile.println(" acceleration ,");
+      sensorDataFile.println("acceleration ,");
       sensorDataFile.println(accel, DEC);
 
       
@@ -352,13 +349,13 @@ void loop()
 
     Serial.print("Current time between Environmental sensor update");
     Serial.print(currentEnvTime);
-    Serial.print(" Celsius");
+    Serial.print(",Celsius");
     Serial.print(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
-    Serial.print("Pressure");
+    Serial.print(",Pressure");
     Serial.print(envPressure); // TODO: This is in HPA. Do we want that?
-    Serial.print("Altitude:");
+    Serial.print(",Altitude:");
     Serial.print(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
-    Serial.print(" meters");
+    Serial.print(",meters");
   
 }
 void driveMotorA(int speed, bool direction)
