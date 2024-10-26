@@ -29,11 +29,10 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 Adafruit_BMP3XX bmp;
 
-unsigned long IMUCheckTimeElapsed = 0UL;
-unsigned long IMUUpdateInterval = 100UL;
-
-unsigned long EnvCheckTimeElapsed = 0UL;
-unsigned long EnvUpdateInterval = 100UL;
+// Records the time since the last sensor update and recording to the SD card
+unsigned long lastSensorUpdate = 0;
+// Update the sensor values and write to the SD card every 3 seconds
+long sensorUpdateInterval = 3000;
 
 // Declare vars for environmental sensor in preparation of writing to file
 double envTemp = 0.0;
@@ -194,14 +193,14 @@ void loop()
  
 
   //maybe add back
-// if(Serial.available() > 0){
-//     String command = Serial.readStringUntil('\n');
-//     command.trim();
-//     motorSpeed = command.toInt();
-//     Serial.println(motorSpeed);
+if(Serial.available() > 0){
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+    motorSpeed = command.toInt();
+    Serial.println(motorSpeed);
     
-//     baseMotor.setSpeedPWMAndDirection(motorSpeed);
-//   }
+    baseMotor.setSpeedPWMAndDirection(motorSpeed);
+  }
 
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
@@ -214,116 +213,116 @@ void loop()
    */
 
   // TODO: Need to add acceleration to the file writing and to the serial output as well
-    imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-    sensors_event_t getIMUEvent;
-    bno.getEvent(&getIMUEvent);
-
-    posX = (getIMUEvent.orientation.x);
-    posY = (getIMUEvent.orientation.y);
-    posZ = (getIMUEvent.orientation.z);
-    uint8_t system, gyro, accel, mag = 0;
-    bno.getCalibration(&system, &gyro, &accel, &mag);
-    Serial.print("Calibration values:");
-    Serial.print(system, DEC);
-    // Serial.print("Gyro=");
-    // Serial.print(gyro, DEC);
-    Serial.print("Acceleration");
-    Serial.print(accel, DEC);
-    // Serial.print("Magnetometer");
-    // Serial.print(mag, DEC);
-
-    // TODO: There is a better way to do this with headers, but this will work for now
-    // TODO: Do this with new string methods
-    sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
-    if (sensorDataFile)
-    {
-      // sensorDataFile.println(", currentIMUTime ,");
-      // sensorDataFile.println(currentIMUTime);
-      sensorDataFile.print"posX ,");
-      sensorDataFile.print(posX);
-      sensorDataFile.print("posY ,");
-      sensorDataFile.print(posY);
-      sensorDataFile.print("posZ ,");
-      sensorDataFile.print(posZ);
-      sensorDataFile.print("acceleration ,");
-      sensorDataFile.print(accel, DEC);
-
-      
-    }
-    else
-    {
-      Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
-    }
-
-    // Serial.print("Current time between IMU Update:");
-    // Serial.print(IMUUpdateInterval);
-    Serial.println("X axis: ");
-    Serial.println(posX);
-    Serial.println("Y axis: ");
-    Serial.println(posY);
-    Serial.println("Z Axis: ");
-    Serial.println(posZ);
-
-    IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
   
+  if(lastSensorUpdate - sensorUpdateInterval >= 0){
+		imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+		sensors_event_t getIMUEvent;
+		bno.getEvent(&getIMUEvent);
 
-  /** This takes data from the enviromental sensor and writes it to a file as well as printing it to the terminal
-   * Data collected includes:
-   * current time in milliseconds
-   * current temperature
-   * current pressure
-   * current altitude ( a derivative of pressure)
-   */
+		posX = (euler.x);
+		posY = (euler.y);
+		posZ = (euler.z);
+		uint8_t system, gyro, accel, mag = 0;
+		bno.getCalibration(&system, &gyro, &accel, &mag);
+		Serial.print("Calibration values:");
+		Serial.print(system, DEC);
+		// Serial.print("Gyro=");
+		// Serial.print(gyro, DEC);
+		Serial.print("Acceleration");
+		Serial.print(accel, DEC);
+		// Serial.print("Magnetometer");
+		// Serial.print(mag, DEC);
 
-  if (!bmp.begin_I2C())
-  {
-    Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
-    return;
+		// TODO: There is a better way to do this with headers, but this will work for now
+		// TODO: Do this with new string methods
+		sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
+		if (sensorDataFile)
+		{
+		  sensorDataFile.print"posX ,");
+		  sensorDataFile.print(posX);
+		  sensorDataFile.print("posY ,");
+		  sensorDataFile.print(posY);
+		  sensorDataFile.print("posZ ,");
+		  sensorDataFile.print(posZ);
+		  sensorDataFile.print("acceleration ,");
+		  sensorDataFile.print(accel, DEC);
+
+		  
+		}
+		else
+		{
+		  Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
+		}
+
+		// Serial.print("Current time between IMU Update:");
+		// Serial.print(IMUUpdateInterval);
+		Serial.println("X axis: ");
+		Serial.println(posX);
+		Serial.println("Y axis: ");
+		Serial.println(posY);
+		Serial.println("Z Axis: ");
+		Serial.println(posZ);
+
+	   
+	  
+
+	  /** This takes data from the enviromental sensor and writes it to a file as well as printing it to the terminal
+	   * Data collected includes:
+	   * current time in milliseconds
+	   * current temperature
+	   * current pressure
+	   * current altitude ( a derivative of pressure)
+	   */
+
+	  if (!bmp.begin_I2C())
+	  {
+		Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
+		return;
+	  }
+
+	  unsigned long currentEnvTime = millis(); // Get the current time in milliseconds- could this possibly be merged into the main function
+
+
+		envTemp = bmp.temperature;
+		envPressure = bmp.pressure / 100;
+		envAltitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+
+		/**Writes the following to the SD card
+		 * The Current Environment sensor time (timestamp)
+		 * Temperature sensor reading/data
+		 * Pressure sensor reading/data
+		 * Altitude sensor reading/data
+		 */
+
+		if (sensorDataFile)
+		{
+
+		  // TODO: There is a better way to do this with headers, but this will work for now
+		  sensorDataFile.print("currentEnvTime ,");
+		  sensorDataFile.print(currentEnvTime);
+		  sensorDataFile.print("envTemp ,");
+		  sensorDataFile.print(envTemp);
+		  sensorDataFile.print("envPressure ,");
+		  sensorDataFile.print(envPressure);
+		  sensorDataFile.print("envAltitude ,");
+		  sensorDataFile.print(envAltitude);
+		  
+		}
+		// else{
+		//   Serial.print("Sensor data is unable to be written to a file. Please check wiring and pin assignments");
+
+		// }
+
+		Serial.println("Current time between Environmental sensor update");
+		Serial.println(currentEnvTime);
+		Serial.println(" Celsius");
+		Serial.println(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
+		Serial.println("Pressure");
+		Serial.println(envPressure); // TODO: This is in HPA. Do we want that?
+		Serial.println("Altitude:");
+		Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
+		Serial.println(" meters");
   }
-
-  unsigned long currentEnvTime = millis(); // Get the current time in milliseconds- could this possibly be merged into the main function
-
-
-    envTemp = bmp.temperature;
-    envPressure = bmp.pressure / 100;
-    envAltitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-
-    /**Writes the following to the SD card
-     * The Current Environment sensor time (timestamp)
-     * Temperature sensor reading/data
-     * Pressure sensor reading/data
-     * Altitude sensor reading/data
-     */
-
-    if (sensorDataFile)
-    {
-
-      // TODO: There is a better way to do this with headers, but this will work for now
-      sensorDataFile.print("currentEnvTime ,");
-      sensorDataFile.print(currentEnvTime);
-      sensorDataFile.print("envTemp ,");
-      sensorDataFile.print(envTemp);
-      sensorDataFile.print("envPressure ,");
-      sensorDataFile.print(envPressure);
-      sensorDataFile.print("envAltitude ,");
-      sensorDataFile.print(envAltitude);
-      
-    }
-    // else{
-    //   Serial.print("Sensor data is unable to be written to a file. Please check wiring and pin assignments");
-
-    // }
-
-    Serial.println("Current time between Environmental sensor update");
-    Serial.println(currentEnvTime);
-    Serial.println(" Celsius");
-    Serial.println(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
-    Serial.println("Pressure");
-    Serial.println(envPressure); // TODO: This is in HPA. Do we want that?
-    Serial.println("Altitude:");
-    Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
-    Serial.println(" meters");
-  
 }
 void driveMotorA(int speed, bool direction)
 {
