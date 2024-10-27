@@ -202,36 +202,34 @@ void loop()
  
 
 if(Serial.available() > 0){
-        String command = Serial.readStringUntil('\n');
-        command.trim();
+    String command = Serial.readStringUntil('\n');
+    command.trim();
     
-    char *token;
-    char *commandArray;
+    char buf[command.length() + 1];
+    command.toCharArray(buf, command.length() + 1);
 
-    const char *delimiter = ",";
+    char *token = strtok(buf, ",");
+    int mor0 = atoi(token);
 
-    token = strtok(commandArray, delimiter);
-    
-    char* charmor0 = strtok(token, ",");
-    char* charser0 = strtok(NULL, ",");
-    char* charser1 = strtok(NULL, ",");
-    char* charser2 = strtok(NULL, ",");
-    char* charser3 = strtok(NULL, ",");
+    token = strtok(NULL, ",");
+    int ser0 = atoi(token);
 
-    int mor0 = atoi(charmor0);
-    int ser0 = atoi(charser0);
-    int ser1 = atoi(charser1);
-    int ser2 = atoi(charser2);
-    int ser3 = atoi(charser3);
+    token = strtok(NULL, ",");
+    int ser1 = atoi(token);
+
+    token = strtok(NULL, ",");
+    int ser2 = atoi(token);
+
+    token = strtok(NULL, ",");
+    int ser3 = atoi(token);
     
     basePitchMotor.setSpeedPWMAndDirection(mor0);
     basePitchServo.write(ser0);
     midPitchServo.write(ser1);
     endPitchServo.write(ser2);
     endEffectorGrabServo.write(ser3);
-    }
     
-
+  }
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
    * X axis orientation
@@ -246,8 +244,8 @@ if(Serial.available() > 0){
   
   if(millis() - previousSensorUpdate >= sensorUpdateInterval){
     previousSensorUpdate = millis();
-	Serial.println("Current time:");
-	Serial.println(previousSensorUpdate /1000);
+	  Serial.println("Current time:");
+	  Serial.println(previousSensorUpdate /1000);
 	
 		digitalWrite(LED_BUILTIN, HIGH);
 		imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
@@ -259,6 +257,7 @@ if(Serial.available() > 0){
 		posZ = euler.z();
 		uint8_t system, gyro, accel, mag = 0;
 		bno.getCalibration(&system, &gyro, &accel, &mag);
+
 		// Serial.print("Calibration values:");
 		// Serial.print(system, DEC);
 		// Serial.print("Gyro=");
@@ -270,7 +269,7 @@ if(Serial.available() > 0){
 
 		// TODO: There is a better way to do this with headers, but this will work for now
 		// TODO: Do this with new string methods
-		
+  
 		
 		sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 		if (sensorDataFile){
@@ -283,8 +282,8 @@ if(Serial.available() > 0){
 		  sensorDataFile.print("acceleration ,");
       sensors_event_t accelerometerData;
       bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
-      sensorDataFile.print(printEvent(&accelerometerData));
-		  // sensorDataFile.print(accel, DEC);
+     // sensorDataFile.print(printEvent(&accelerometerData));
+		  sensorDataFile.println(accel, DEC);
     
 
 
@@ -306,8 +305,8 @@ if(Serial.available() > 0){
 		Serial.println("Acceleration");
 		sensors_event_t accelerometerData;
 		bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
-		Serial.println(printEvent(&accelerometerData));
-	   
+		//Serial.println(printEvent(&accelerometerData));
+	  Serial.println(accel, DEC); 
 	  
 
 	  /** This takes data from the enviromental sensor and writes it to a file as well as printing it to the terminal
@@ -369,18 +368,18 @@ if(Serial.available() > 0){
 		digitalWrite(LED_BUILTIN, LOW);	
   }
 }
-void driveMotorA(int speed, bool direction)
-{
-  if (direction)
-  {
-    digitalWrite(bin1, HIGH);
-    digitalWrite(bin2, HIGH);
-  }
-}
-void stopMotor()
-{
-  analogWrite(PWMA, 0);
-}
+// void driveMotorA(int speed, bool direction)
+// {
+//   if (direction)
+//   {
+//     digitalWrite(bin1, HIGH);
+//     digitalWrite(bin2, HIGH);
+//   }
+// }
+// void stopMotor()
+// {
+//   analogWrite(PWMA, 0);
+// }
 
 String printEvent(sensors_event_t* event) {
   double x = -1000000, y = -1000000 , z = -1000000; //dumb values, easy to spot problem
