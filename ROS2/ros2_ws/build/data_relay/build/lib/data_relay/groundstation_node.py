@@ -194,7 +194,7 @@ class TalkerNode(Node):
 
 
             msg = String()
-            msg.data = str(f"base:{self.motor_speed},ser0:{self.joint0_angle},ser1:{self.joint1_angle},ser2:{self.joint2_angle},ser3:{self.joint3_angle}")
+            msg.data = str(f"{self.motor_speed},{self.joint0_angle},{self.joint1_angle},{self.joint2_angle},{self.joint3_angle}")
             self.publisher_.publish(msg)
             self.get_logger().info(msg.data)
 
