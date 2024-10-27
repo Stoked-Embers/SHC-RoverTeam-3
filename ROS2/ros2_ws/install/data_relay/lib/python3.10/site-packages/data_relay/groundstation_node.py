@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QMetaObject, Qt, Q_ARG
 from data_relay.groundstation import Ui_MainWindow
 from pygame.locals import *
+import re
 
 from std_msgs.msg import String
 
@@ -33,6 +34,8 @@ class TalkerNode(Node):
         self.listener_ = self.create_subscription(
             String, '/pico/output', self.listener_callback, 10)
         self.listener_
+
+        self.TimeData = 0
 
         self.motor_speed = 0
         self.selected_motor_speed = 0
@@ -106,6 +109,16 @@ class TalkerNode(Node):
 
     def listener_callback(self, msg):
         self.get_logger().info(msg.data + "\n")
+        #xyz
+        #acceleration
+        #Temp, Pressure, Altitude
+        self.output = msg.data
+        self.posXYZ, self.acceleration, self.atmospheric = self.output.split("$")
+        self.get_logger().info(f"{self.posXYZ} {self.acceleration} {self.atmospheric}")
+        elapsed_time = int(time.time() - self.start_time)
+        format_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+        QMetaObject.invokeMethod(self.ui.imuDisplay, "append", Qt.QueuedConnection, Q_ARG(str(f"{format_time} - {self.posXYZ}")))
+        
 
 #----------------------------------------------------------------------------------------------
 
@@ -115,6 +128,7 @@ class TalkerNode(Node):
         while self.running:
             time.sleep(0.1)
             events = pygame.event.get()
+            self.TimeData += 0.1
 
             # BASE MOTOR CONTROLS
             self.x_axis = self.joystick.get_axis(0)
@@ -132,41 +146,41 @@ class TalkerNode(Node):
             self.update_servo_speed()
             if (self.currentServo == 0):
                 if self.y_axis < -0.5 and (self.joint0_angle >= 0): 
-                    self.joint0_angle = min(130, self.joint0_angle + self.servoSpeed)
+                    self.joint0_angle = min(180, self.joint0_angle + self.servoSpeed)
                 elif self.y_axis > 0.5:
                     if((self.joint0_angle - self.servoSpeed) < 0):
                         self.joint0_angle = 0
                     else:
-                        self.joint0_angle = min(130, self.joint0_angle - self.servoSpeed)
+                        self.joint0_angle = min(180, self.joint0_angle - self.servoSpeed)
             # Servo 1
             elif (self.currentServo == 1):
                 if self.y_axis < -0.5 and (self.joint1_angle >= 0): 
-                    self.joint1_angle = min(130, self.joint1_angle + self.servoSpeed)
+                    self.joint1_angle = min(180, self.joint1_angle + self.servoSpeed)
             
                 elif self.y_axis > 0.5:
                     if((self.joint1_angle - self.servoSpeed) < 0):
                         self.joint1_angle = 0
                     else:
-                        self.joint1_angle = min(130, self.joint1_angle - self.servoSpeed)
+                        self.joint1_angle = min(180, self.joint1_angle - self.servoSpeed)
             # Servo 2
             elif (self.currentServo == 2):
                 if self.y_axis < -0.5 and (self.joint2_angle >= 0): 
-                    self.joint2_angle = min(130, self.joint2_angle + self.servoSpeed)
+                    self.joint2_angle = min(180, self.joint2_angle + self.servoSpeed)
             
                 elif self.y_axis > 0.5:
                     if((self.joint2_angle - self.servoSpeed) < 0):
                         self.joint2_angle = 0
                     else:
-                        self.joint2_angle = min(130, self.joint2_angle - self.servoSpeed)
+                        self.joint2_angle = min(180, self.joint2_angle - self.servoSpeed)
 
             # END EFFECTOR
             if self.joystick.get_button(6) and not self.joystick.get_button(7):
                 if((self.joint3_angle - 3) < 0):
                     self.joint3_angle = 0
                 else:
-                    self.joint3_angle = min(130, self.joint3_angle - 3)
+                    self.joint3_angle = min(180, self.joint3_angle - 3)
             elif self.joystick.get_button(7) and not self.joystick.get_button(6):
-                self.joint3_angle = min(130, self.joint3_angle + 3)
+                self.joint3_angle = min(180, self.joint3_angle + 3)
 
 
             # CHANGE MOTOR SPEED WITH KEYS ---- OUTDATED

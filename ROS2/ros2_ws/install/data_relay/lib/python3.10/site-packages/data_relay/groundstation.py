@@ -387,10 +387,10 @@ class Ui_MainWindow(object):
         self.globalMotorSpeedLabel.raise_()
 
         # Timer which determines when to update graphs and feed
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_data)
-        self.timer.timeout.connect(self.update_feed)
-        self.timer.start(1000)
+        #self.timer = QTimer()
+        #self.timer.timeout.connect(self.update_data)
+        #self.timer.timeout.connect(self.update_feed)
+        #self.timer.start(500)
 
         self.graphLayout = QtWidgets.QVBoxLayout(self.graphFrame)
         self.graphLayout.setGeometry(QtCore.QRect(0, 0, 1920, 1080))
@@ -454,16 +454,16 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.875pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
 
-    def update_data(self):
-        simulation = random.uniform(-10, 10) # placeholder, will later be IMU data
-        self.graph.update_graph(simulation)
+    def update_data(self, AccelerationData, TimeData):
+        self.graph_data = (AccelerationData, TimeData)
+        self.graph.update_graph()
 
-    def update_feed(self):
+
+    def update_feed(self, imuData, temperature):
         elapsed_time = int(time.time() - self.start_time)
         format_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time)) #Formatting for how time prints out
-        
-        imuData = "No Data"             # Placeholder for now, but eventually will need a specific case where it prints no data if no data is recieved
-        temperature = "No Data"         # also placeholder
+    
+
 
         new_imuData = f"{format_time} - {imuData}"
         new_temperature = f"{format_time} - {temperature}"

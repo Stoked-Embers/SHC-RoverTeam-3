@@ -16,7 +16,8 @@ data_relay/listener.py
 data_relay/motor_talker.py
 data_relay/newdiagrams_rc.py
 data_relay/pygame_node.py
-data_relay/relay_node.py
+data_relay/relay_pub.py
+data_relay/relay_sub.py
 data_relay/talker.py
 resource/data_relay
 test/test_copyright.py

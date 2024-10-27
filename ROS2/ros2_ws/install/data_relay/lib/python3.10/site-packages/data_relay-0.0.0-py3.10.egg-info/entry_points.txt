@@ -3,6 +3,7 @@ groundstation_node = data_relay.groundstation_node:main
 listener_node = data_relay.listener:main
 motor_talker = data_relay.motor_talker:main
 pygame_node = data_relay.pygame_node:main
-relay_node = data_relay.relay_node:main
+relay_pub = data_relay.relay_pub:main
+relay_sub = data_relay.relay_sub:main
 talker_node = data_relay.talker:main
 

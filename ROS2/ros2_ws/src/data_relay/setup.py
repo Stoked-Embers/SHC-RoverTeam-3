@@ -24,8 +24,9 @@ setup(
             "listener_node = data_relay.listener:main",
             "pygame_node = data_relay.pygame_node:main",
             "motor_talker = data_relay.motor_talker:main",
-            "relay_node = data_relay.relay_node:main",
-            "groundstation_node = data_relay.groundstation_node:main"
+            "relay_sub = data_relay.relay_sub:main",
+            "groundstation_node = data_relay.groundstation_node:main",
+            "relay_pub = data_relay.relay_pub:main"
         ],
     },
 )
