@@ -73,7 +73,34 @@ class TalkerNode(Node):
 
     def update_global_speed(self):
         if self.ui and hasattr(self.ui, 'globalMotorSpeedSpinBox'):
-            QMetaObject.invokeMethod(self.ui.globalMotorSpeedSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.selected_motor_speed))
+            QMetaObject.invokeMethod(self.ui.globalMotorSpeedSpinBox, "setValue",
+                                      Qt.QueuedConnection, Q_ARG(int, self.selected_motor_speed))
+
+#----------------------------------------------------------------------------------------------
+
+    def update_selected_servo(self):
+        if self.currentServo == 0:
+            if self.ui and hasattr(self.ui, 'baseButton'):
+                QMetaObject.invokeMethod(self.ui.baseButton, "setChecked", Qt.QueuedConnection, Q_ARG(bool, True))
+        elif self.currentServo == 1:
+            if self.ui and hasattr(self.ui, 'midButton'):
+                QMetaObject.invokeMethod(self.ui.midButton, "setChecked", Qt.QueuedConnection, Q_ARG(bool, True))
+        elif self.currentServo == 2:
+            if self.ui and hasattr(self.ui, 'endButton'):
+                QMetaObject.invokeMethod(self.ui.endButton, "setChecked", Qt.QueuedConnection, Q_ARG(bool, True))
+
+#----------------------------------------------------------------------------------------------
+
+    def update_servo_speed(self):
+        if self.currentServo == 0:
+            if self.ui and hasattr(self.ui, 'baseSpinBox'):
+                QMetaObject.invokeMethod(self.ui.baseSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.joint0_angle))
+        elif self.currentServo == 1:
+            if self.ui and hasattr(self.ui, 'midSpinBox'):
+                QMetaObject.invokeMethod(self.ui.midSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.joint1_angle))
+        elif self.currentServo == 2:
+            if self.ui and hasattr(self.ui, 'endSpinBox'):
+                QMetaObject.invokeMethod(self.ui.endSpinBox, "setValue", Qt.QueuedConnection, Q_ARG(int, self.joint2_angle))
 
 #----------------------------------------------------------------------------------------------
 
@@ -101,6 +128,8 @@ class TalkerNode(Node):
             # SERVO MOVEMENT CONTROLS
             self.y_axis = self.joystick.get_axis(4)
             # Servo 0
+            self.update_selected_servo()
+            self.update_servo_speed()
             if (self.currentServo == 0):
                 if self.y_axis < -0.5 and (self.joint0_angle >= 0): 
                     self.joint0_angle = min(130, self.joint0_angle + self.servoSpeed)
