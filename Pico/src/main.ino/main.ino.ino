@@ -244,8 +244,8 @@ if(Serial.available() > 0){
   
   if(millis() - previousSensorUpdate >= sensorUpdateInterval){
     previousSensorUpdate = millis();
-	  Serial.println("Current time:");
-	  Serial.println(previousSensorUpdate /1000);
+	  // Serial.println("Current time:");
+	  // Serial.println(previousSensorUpdate /1000);
 	
 		digitalWrite(LED_BUILTIN, HIGH);
 		imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
