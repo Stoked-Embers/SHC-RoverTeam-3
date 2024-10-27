@@ -291,7 +291,7 @@ class Ui_MainWindow(object):
         self.controlsDiagram.setMinimumSize(QtCore.QSize(512, 143))
         self.controlsDiagram.setText("")
         self.controlsDiagram.setTextFormat(QtCore.Qt.PlainText)
-        self.controlsDiagram.setPixmap(QtGui.QPixmap(":/xboxmap.png"))
+        self.controlsDiagram.setPixmap(QtGui.QPixmap(":/ps5.png"))
         self.controlsDiagram.setScaledContents(True)
         self.controlsDiagram.setAlignment(QtCore.Qt.AlignCenter)
         self.controlsDiagram.setObjectName("controlsDiagram")

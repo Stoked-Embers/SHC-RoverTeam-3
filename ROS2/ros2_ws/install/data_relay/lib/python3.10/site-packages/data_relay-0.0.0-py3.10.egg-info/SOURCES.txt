@@ -14,6 +14,7 @@ data_relay/groundstation.py
 data_relay/groundstation_node.py
 data_relay/listener.py
 data_relay/motor_talker.py
+data_relay/newdiagrams_rc.py
 data_relay/pygame_node.py
 data_relay/relay_node.py
 data_relay/talker.py
