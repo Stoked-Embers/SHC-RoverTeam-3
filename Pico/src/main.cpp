@@ -17,6 +17,8 @@
 #include <Adafruit_BNO055.h>
 #include "SparkFun_TB6612.h"
 #include <utility/imumaths.h>
+#include "PWMDcMotor.hpp"
+#include "RobotCarPinDefinitionsAndMore.h"
 #include <Servo.h>
 // #include <SparkFun_TB6612.h>
 
@@ -59,6 +61,8 @@ double posZ = 0.0;
 const int basePitchOffset = 1;
 const int baseRotateOffset = 1;
 
+PWMDcMotor baseMotor;
+
 // Motor baseRotateMotor = Motor(BIN1, BIN2, PWMB, baseRotateOffset, STBY);
 // Motor basePitchMotor = Motor(BIN1, BIN2, PWMB, basePitchOffset, STBY);
 
@@ -75,12 +79,15 @@ const int speed = 5;
 
 void driveMotorA(int speed, bool direction);
 
+int motorSpeed = 0;
+
+
 void setup()
 {
   // put your setup code here, to run once:
 
   Serial.begin(9600); // Begin broadcasting/receiving over serial on a baud rate of 9600
-
+  baseMotor.init(6, 7, 8);
 
   // Set up pins for digital input and output- for help refer to the "Resources" folder for the schematic
   // Using pins 1-6 for servo output.
@@ -96,11 +103,11 @@ void setup()
   pinMode(12, OUTPUT);
 
   // TODO: Double check the pin assignment on this
-  pinMode(4, INPUT);  // SDA-BMP388- SDA = serial input to processor- confirm
-  pinMode(5, OUTPUT); // SCL-BMP388
+  //pinMode(4, INPUT);  // SDA-BMP388- SDA = serial input to processor- confirm
+  //pinMode(5, OUTPUT); // SCL-BMP388
 
-  pinMode(4, OUTPUT); // SCL-BNO055
-  pinMode(5, INPUT);  // SDA-BNO055- SDA = serial input to processor- confirm
+  //pinMode(4, OUTPUT); // SCL-BNO055
+  //pinMode(5, INPUT);  // SDA-BNO055- SDA = serial input to processor- confirm
 
   pinMode(40, OUTPUT); // Output to Libre
 
@@ -134,17 +141,17 @@ void setup()
     Serial.println("initialization failed!");
   
   }
-  sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+  sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 
 
   Serial.println("initialization done.");
 
   // Check that we are receiving input from the BMP 388, print error message if not
-  if (!bmp.begin_I2C())
-  {
-    Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
+  // if (!bmp.begin_I2C())
+  // {
+  //   Serial.println("No BMP388 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc. ");
    
-  }
+  // }
   if (!bno.begin())
   {
     Serial.print("No BNO055 sensor is detected. Please check wiring, pin assignment in both hardware and software,etc.");
@@ -167,7 +174,9 @@ void setup()
   bno.setExtCrystalUse(true); //? What is this? Something to do with accuracy of measurements?
   // TODO: Take a look at the crystal
   // sensorDataFile = SD.open("sensorData.txt");
+
 }
+
 
 void loop()
 {
@@ -177,10 +186,10 @@ void loop()
   // ! Temporary IMU Output for testing purposes
   // TODO: This is just temporary for testing- able to display values from the IMU, but are not truly readable and able to be interpreted.
   // TODO: Going with 2 decimal places at this time. Determine if we need to change this
-  digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
-  delay(1000);                      // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
-  delay(1000);     
+  // digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+  // delay(1000);                      // wait for a second
+  // digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+  // delay(1000);     
   unsigned long currentIMUTime = millis(); // Get the current time in milliseconds
 
   /**Serial communication
@@ -215,18 +224,17 @@ void loop()
   //     }
   //   }
   // }
-  if(Serial.available()){
-    String command = Serial.readStringUntil('\n');
-    command.trim();
 
-    if(command == "50"){
-      driveMotorA(command.toInt(), true);
-    }
-    if(command == "0"){
-      driveMotorA(command.toInt(), true);
-    }
+  //maybe add back
+// if(Serial.available() > 0){
+//     String command = Serial.readStringUntil('\n');
+//     command.trim();
+//     motorSpeed = command.toInt();
+//     Serial.println(motorSpeed);
     
-  }
+//     baseMotor.setSpeedPWMAndDirection(motorSpeed);
+//   }
+
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
    * X axis orientation
@@ -259,18 +267,18 @@ void loop()
 
     // TODO: There is a better way to do this with headers, but this will work for now
     // TODO: Do this with new string methods
-    sensorDataFile = SD.open("sensorData.txt", FILE_WRITE);
+    sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
     if (sensorDataFile)
     {
-      sensorDataFile.println(", currentIMUTime ,");
-      sensorDataFile.println(currentIMUTime);
-      sensorDataFile.println("  posX ,");
-      sensorDataFile.println(posX);
-      sensorDataFile.println("  posY ,");
-      sensorDataFile.println(posY);
-      sensorDataFile.println("  posZ ,");
+      // sensorDataFile.println(", currentIMUTime ,");
+      // sensorDataFile.println(currentIMUTime);
+      sensorDataFile.print("posX ,");
+      sensorDataFile.print(posX);
+      sensorDataFile.print("posY ,");
+      sensorDataFile.print(posY);
+      sensorDataFile.println("posZ ,");
       sensorDataFile.println(posZ);
-      sensorDataFile.println(" acceleration ,");
+      sensorDataFile.println("acceleration ,");
       sensorDataFile.println(accel, DEC);
 
       
@@ -280,14 +288,14 @@ void loop()
       Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
     }
 
-    Serial.print("Current time between IMU Update:");
-    Serial.print(IMUUpdateInterval);
-    Serial.print("X axis: ");
-    Serial.print(posX);
-    Serial.print("\tY axis: ");
-    Serial.print(posY);
-    Serial.print("\tZ Axis: ");
-    Serial.print(posZ);
+    // Serial.print("Current time between IMU Update:");
+    // Serial.print(IMUUpdateInterval);
+    Serial.println("X axis: ");
+    Serial.println(posX);
+    Serial.println("Y axis: ");
+    Serial.println(posY);
+    Serial.println("Z Axis: ");
+    Serial.println(posZ);
 
     IMUCheckTimeElapsed = currentIMUTime; // Update the previous IMU value with the current value of the time elapsed so it can trigger the conditional
   
@@ -300,7 +308,7 @@ void loop()
    * current altitude ( a derivative of pressure)
    */
 
-  if (!bmp.performReading())
+  if (!bmp.begin_I2C())
   {
     Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
     return;
@@ -341,13 +349,13 @@ void loop()
 
     Serial.print("Current time between Environmental sensor update");
     Serial.print(currentEnvTime);
-    Serial.print(" Celsius");
+    Serial.print(",Celsius");
     Serial.print(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
-    Serial.print("Pressure");
+    Serial.print(",Pressure");
     Serial.print(envPressure); // TODO: This is in HPA. Do we want that?
-    Serial.print("Altitude:");
+    Serial.print(",Altitude:");
     Serial.print(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
-    Serial.print(" meters");
+    Serial.print(",meters");
   
 }
 void driveMotorA(int speed, bool direction)
