@@ -112,7 +112,7 @@
 </string>
            </property>
            <property name="text">
-            <string>Motor Controls</string>
+            <string>Servo Controls</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -136,7 +136,7 @@
             <string notr="true">color: rgb(255, 255, 255)</string>
            </property>
            <property name="text">
-            <string>Global Motor Speed</string>
+            <string>Global Servo Speed</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -442,7 +442,7 @@ background-color: rgb(255, 255, 255);</string>
           <enum>Qt::PlainText</enum>
          </property>
          <property name="pixmap">
-          <pixmap>images/xboxmap.png</pixmap>
+          <pixmap>images/ps5.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>

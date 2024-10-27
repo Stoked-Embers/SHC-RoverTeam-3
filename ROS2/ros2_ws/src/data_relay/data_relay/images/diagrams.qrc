@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>ps5.png</file>
     <file>armdiagram.png</file>
     <file>xboxmap.png</file>
   </qresource>
