@@ -23,8 +23,12 @@
 #define BIN2 10
 #define STBY 41
 
+// SPI.setSCK(18);
+// SPI.setRX(16);
+// SPI.setTX(19);
 
-Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
+Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 #define SEALEVELPRESSURE_HPA (1013.25) // TODO: Does this value need to be tuned
 
 Adafruit_BMP3XX bmp;
@@ -137,7 +141,7 @@ void setup()
   
   }
   // This should create a file if it does not exist. NOTE: Keep the file write command in the loop. It does not overwrite the file, but opens it and write data to it.
-  sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
+  // sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 
 
   Serial.println("initialization done.");
@@ -197,39 +201,36 @@ void loop()
    */
  
 
-	 
-	if(Serial.available() > 0){
-		String command = Serial.readStringUntil('\n');
-		command.trim();
-		motorAssignment = command.substring(0,3);
-		motorSpeedAssignmentUnfiltered = command.substring(4,8);
-		
-		
-		
-		Serial.println(motorSpeed);
-		motorSpeedAssignmentUnfiltered.replace(" ", "");
-		motorSpeedAssignment = motorSpeedAssignmentUnfiltered.toInt();
-		
-		if(motorAssignment == "mor0"){
-			// Checks that the value passed in is between the rotation limits of the motor. If it does not, then print an error to serial and do not execute the movement command
-			if(motorSpeedAssignment > 0 && motorSpeed < 180){
-				basePitchMotor.setSpeedPWMAndDirection(motorSpeedAssignment);
-			}
-			else{
-				Serial.print("The value provided does not fit within the range of 0 degrees to 180 degrees. Therefore, the command has not been sent to the motor. Please try another value.");
-			}
-		}
-		else if(motorAssignment == "ser1"){
-			midPitchServo.write(motorSpeedAssignment);	
-		}
-		else if(motorAssignment == "ser2"){
-			endPitchServo.write(motorSpeedAssignment);
-		}
-		else if(motorAssignment == "ser3"){
-			endEffectorGrabServo.write(motorSpeedAssignment);	
-		}
-		
-	  }
+if(Serial.available() > 0){
+        String command = Serial.readStringUntil('\n');
+        command.trim();
+    
+    char *token;
+    char *commandArray;
+
+    const char *delimiter = ",";
+
+    token = strtok(commandArray, delimiter);
+    
+    char* charmor0 = strtok(token, ",");
+    char* charser0 = strtok(NULL, ",");
+    char* charser1 = strtok(NULL, ",");
+    char* charser2 = strtok(NULL, ",");
+    char* charser3 = strtok(NULL, ",");
+
+    int mor0 = atoi(charmor0);
+    int ser0 = atoi(charser0);
+    int ser1 = atoi(charser1);
+    int ser2 = atoi(charser2);
+    int ser3 = atoi(charser3);
+    
+    basePitchMotor.setSpeedPWMAndDirection(mor0);
+    basePitchServo.write(ser0);
+    midPitchServo.write(ser1);
+    endPitchServo.write(ser2);
+    endEffectorGrabServo.write(ser3);
+    }
+    
 
 
   /** This section collects IMU data and writes it to a file. Data collected includes:
@@ -246,7 +247,7 @@ void loop()
   if(millis() - previousSensorUpdate >= sensorUpdateInterval){
     previousSensorUpdate = millis();
 	Serial.println("Current time:");
-	Serial.println(previousSensorUpdate);
+	Serial.println(previousSensorUpdate /1000);
 	
 		digitalWrite(LED_BUILTIN, HIGH);
 		imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
@@ -269,6 +270,8 @@ void loop()
 
 		// TODO: There is a better way to do this with headers, but this will work for now
 		// TODO: Do this with new string methods
+		
+		
 		sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 		if (sensorDataFile){
 		  sensorDataFile.print("posX ,");
@@ -278,16 +281,19 @@ void loop()
 		  sensorDataFile.print("posZ ,");
 		  sensorDataFile.print(posZ);
 		  sensorDataFile.print("acceleration ,");
-		  sensorDataFile.print(accel, DEC);
+      sensors_event_t accelerometerData;
+      bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+      sensorDataFile.print(printEvent(&accelerometerData));
+		  // sensorDataFile.print(accel, DEC);
     
 
 
-		  
+		  sensorDataFile.close();
 		}
-		// else
-		// {
-		  // Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
-		// }
+		else
+		{
+		  Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
+		}
 
 		// Serial.print("Current time between IMU Update:");
 		// Serial.print(IMUUpdateInterval);
@@ -298,9 +304,9 @@ void loop()
 		Serial.println("Z Axis: ");
 		Serial.println(posZ);
 		Serial.println("Acceleration");
-		Serial.println(accel, DEC);
-		
-
+		sensors_event_t accelerometerData;
+		bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+		Serial.println(printEvent(&accelerometerData));
 	   
 	  
 
@@ -331,7 +337,7 @@ void loop()
 		 * Pressure sensor reading/data
 		 * Altitude sensor reading/data
 		 */
-
+    sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
 		if (sensorDataFile)
 		{
 
@@ -344,7 +350,7 @@ void loop()
 		  sensorDataFile.print(envPressure);
 		  sensorDataFile.print("envAltitude ,");
 		  sensorDataFile.print(envAltitude);
-		  
+		  sensorDataFile.close();
 		}
 		// else{
 		//   Serial.print("Sensor data is unable to be written to a file. Please check wiring and pin assignments");
@@ -374,4 +380,15 @@ void driveMotorA(int speed, bool direction)
 void stopMotor()
 {
   analogWrite(PWMA, 0);
+}
+
+String printEvent(sensors_event_t* event) {
+  double x = -1000000, y = -1000000 , z = -1000000; //dumb values, easy to spot problem
+  if (event->type == SENSOR_TYPE_ACCELEROMETER) {
+    Serial.print("Accl:");
+    x = event->acceleration.x;
+    y = event->acceleration.y;
+    z = event->acceleration.z;
+  }
+  return String(x)+String(y)+String(z);  
 }
