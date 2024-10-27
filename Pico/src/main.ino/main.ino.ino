@@ -30,6 +30,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 Adafruit_BMP3XX bmp;
 
 // Records the time since the last sensor update and recording to the SD card
+unsigned long previousSensorUpdate = 0;
 unsigned long lastSensorUpdate = 0;
 // Update the sensor values and write to the SD card every 3 seconds
 long sensorUpdateInterval = 3000;
@@ -68,13 +69,13 @@ void driveMotorA(int speed, bool direction);
 int motorSpeed = 0;
 
 Servo basePitchServo;
-Servo midPitchServo:
+Servo midPitchServo;
 Servo endPitchServo;
 Servo endEffectorGrabServo;
 
 String motorAssignment;
 String motorSpeedAssignmentUnfiltered;
-String motorSpeedAssignment;
+int motorSpeedAssignment;
 
 void setup()
 {
@@ -96,8 +97,8 @@ void setup()
   midPitchServo.attach(1,700, 2000);
   // Attach the end effector pitch servo to pin 2 (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
   endPitchServo.attach(2,700, 2000);
-  // Attach the end effector pitch servo to pin 3 (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
-  endEffectorGrabServo.attach(3,700,2000);
+  // Attach the claw servo to pin 3 (Going to a pretty narrow band to begin with)
+  endEffectorGrabServo.attach(3,1200,2000);
   // pinMode(1, OUTPUT); // Grab — MGT Servo
   // pinMode(2, OUTPUT); // Rotation MGT-Servo
   // pinMode(3, OUTPUT); // PWMA Driver - Is this an input?
@@ -201,17 +202,17 @@ void loop()
 		String command = Serial.readStringUntil('\n');
 		command.trim();
 		motorAssignment = command.substring(0,3);
-		motorSpeedAssignmentUnfiltered = command.substring(4,8)
+		motorSpeedAssignmentUnfiltered = command.substring(4,8);
 		
 		
 		
 		Serial.println(motorSpeed);
-		motorSpeedAssignment = motorSpeedAssignmentUnfiltered.erase(remove(motorSpeedAssignment.begin(), motorSpeedAssignment.end(), ' '), motorSpeedAssignment.end());
-		motorSpeedAssignment = command.toInt();
+		motorSpeedAssignmentUnfiltered.replace(" ", "");
+		motorSpeedAssignment = motorSpeedAssignmentUnfiltered.toInt();
 		
 		if(motorAssignment == "mor0"){
 			// Checks that the value passed in is between the rotation limits of the motor. If it does not, then print an error to serial and do not execute the movement command
-			if(motorSpeedAssignment >= 0 && motorSpeed =< 180){
+			if(motorSpeedAssignment > 0 && motorSpeed < 180){
 				basePitchMotor.setSpeedPWMAndDirection(motorSpeedAssignment);
 			}
 			else{
@@ -242,32 +243,35 @@ void loop()
 
   // TODO: Need to add acceleration to the file writing and to the serial output as well
   
-  if(lastSensorUpdate - sensorUpdateInterval >= 0){
+  if(millis() - previousSensorUpdate >= sensorUpdateInterval){
+    previousSensorUpdate = millis();
+	Serial.println("Current time:");
+	Serial.println(previousSensorUpdate);
+	
 		digitalWrite(LED_BUILTIN, HIGH);
 		imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
 		sensors_event_t getIMUEvent;
 		bno.getEvent(&getIMUEvent);
 
-		posX = (euler.x);
-		posY = (euler.y);
-		posZ = (euler.z);
+		posX = euler.x();
+		posY = euler.y();
+		posZ = euler.z();
 		uint8_t system, gyro, accel, mag = 0;
 		bno.getCalibration(&system, &gyro, &accel, &mag);
-		Serial.print("Calibration values:");
-		Serial.print(system, DEC);
+		// Serial.print("Calibration values:");
+		// Serial.print(system, DEC);
 		// Serial.print("Gyro=");
 		// Serial.print(gyro, DEC);
-		Serial.print("Acceleration");
-		Serial.print(accel, DEC);
+		// Serial.print("Acceleration");
+		// Serial.print(accel, DEC);
 		// Serial.print("Magnetometer");
 		// Serial.print(mag, DEC);
 
 		// TODO: There is a better way to do this with headers, but this will work for now
 		// TODO: Do this with new string methods
 		sensorDataFile = SD.open("sensorData.csv", FILE_WRITE);
-		if (sensorDataFile)
-		{
-		  sensorDataFile.print"posX ,");
+		if (sensorDataFile){
+		  sensorDataFile.print("posX ,");
 		  sensorDataFile.print(posX);
 		  sensorDataFile.print("posY ,");
 		  sensorDataFile.print(posY);
@@ -275,13 +279,15 @@ void loop()
 		  sensorDataFile.print(posZ);
 		  sensorDataFile.print("acceleration ,");
 		  sensorDataFile.print(accel, DEC);
+    
+
 
 		  
 		}
-		else
-		{
-		  Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
-		}
+		// else
+		// {
+		  // Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
+		// }
 
 		// Serial.print("Current time between IMU Update:");
 		// Serial.print(IMUUpdateInterval);
@@ -291,6 +297,9 @@ void loop()
 		Serial.println(posY);
 		Serial.println("Z Axis: ");
 		Serial.println(posZ);
+		Serial.println("Acceleration");
+		Serial.println(accel, DEC);
+		
 
 	   
 	  
@@ -342,8 +351,8 @@ void loop()
 
 		// }
 
-		Serial.println("Current time between Environmental sensor update");
-		Serial.println(currentEnvTime);
+		// Serial.println("Current time between Environmental sensor update");
+		// Serial.println(currentEnvTime);
 		Serial.println(" Celsius");
 		Serial.println(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
 		Serial.println("Pressure");
