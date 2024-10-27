@@ -307,7 +307,11 @@ if(Serial.available() > 0){
 		//Serial.println(printEvent(&accelerometerData));
 		
 		Serial.print("$");
-		Serial.print(posX + "," + posY + "," + posZ + "$");
+		Serial.print(posX);
+		Serial.print(",");
+		Serial.print(posY);
+		Serial.print(",");
+		Serial.print(posZ);
 		sensors_event_t accelerometerData;
 		bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
 		Serial.print(printEvent(&accelerometerData));
@@ -372,7 +376,11 @@ if(Serial.available() > 0){
 		// Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
 		// Serial.println(" meters");
 		
-		Serial.print(envTemp + "," + envPressure + "," + envAltitude);
+		Serial.print(envTemp);
+		Serial.print(",");
+		Serial.print(envPressure);
+		Serial.print(",");
+		Serial.print(envAltitude);
 		
 		digitalWrite(LED_BUILTIN, LOW);	
   }
