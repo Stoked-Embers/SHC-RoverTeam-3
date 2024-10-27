@@ -98,11 +98,11 @@ void setup()
   // Attach the base servo (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
   basePitchServo.attach(0,700, 2000); 
   // Attach the middle servo (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
-  midPitchServo.attach(1,700, 2000);
+  midPitchServo.attach(3,700, 2000);
   // Attach the end effector pitch servo to pin 2 (value between slightly above 0- probably about 10, and slightly below 180 to prevent conflict)
-  endPitchServo.attach(2,700, 2000);
+  endPitchServo.attach(1,700, 2000);
   // Attach the claw servo to pin 3 (Going to a pretty narrow band to begin with)
-  endEffectorGrabServo.attach(3,1200,2000);
+  endEffectorGrabServo.attach(2,1200,2000);
   // pinMode(1, OUTPUT); // Grab — MGT Servo
   // pinMode(2, OUTPUT); // Rotation MGT-Servo
   // pinMode(3, OUTPUT); // PWMA Driver - Is this an input?
@@ -291,7 +291,7 @@ if(Serial.available() > 0){
 		}
 		else
 		{
-		  Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
+		 // Serial.println("Unable to write to the sensor data file. Check wiring and pin assignments");
 		}
 
 		// Serial.print("Current time between IMU Update:");
@@ -306,12 +306,13 @@ if(Serial.available() > 0){
 		
 		//Serial.println(printEvent(&accelerometerData));
 		
-		Serial.print("$");
+		//Serial.print("$");
 		Serial.print(posX);
 		Serial.print(",");
 		Serial.print(posY);
 		Serial.print(",");
 		Serial.print(posZ);
+    Serial.print("$");
 		sensors_event_t accelerometerData;
 		bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
 		Serial.print(printEvent(&accelerometerData));
@@ -329,7 +330,7 @@ if(Serial.available() > 0){
 
 	  if (!bmp.begin_I2C())
 	  {
-		Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
+		//Serial.println("Sensor is not able to perform the reading. Please check that the sensor is connected correctly (wiring and software)");
 		return;
 	  }
 
@@ -381,6 +382,7 @@ if(Serial.available() > 0){
 		Serial.print(envPressure);
 		Serial.print(",");
 		Serial.print(envAltitude);
+    Serial.print("$");
 		
 		digitalWrite(LED_BUILTIN, LOW);	
   }
@@ -401,7 +403,7 @@ if(Serial.available() > 0){
 String printEvent(sensors_event_t* event) {
   double x = -1000000, y = -1000000 , z = -1000000; //dumb values, easy to spot problem
   if (event->type == SENSOR_TYPE_ACCELEROMETER) {
-    Serial.print("Accl:");
+    // Serial.print("Accl:");
     x = event->acceleration.x;
     y = event->acceleration.y;
     z = event->acceleration.z;
