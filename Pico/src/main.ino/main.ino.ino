@@ -296,17 +296,23 @@ if(Serial.available() > 0){
 
 		// Serial.print("Current time between IMU Update:");
 		// Serial.print(IMUUpdateInterval);
-		Serial.println("X axis: ");
-		Serial.println(posX);
-		Serial.println("Y axis: ");
-		Serial.println(posY);
-		Serial.println("Z Axis: ");
-		Serial.println(posZ);
-		Serial.println("Acceleration");
+		// Serial.println("X axis: ");
+		// Serial.println(posX);
+		// Serial.println("Y axis: ");
+		// Serial.println(posY);
+		// Serial.println("Z Axis: ");
+		// Serial.println(posZ);
+		// Serial.println("Acceleration");
+		
+		//Serial.println(printEvent(&accelerometerData));
+		
+		Serial.print("$");
+		Serial.print(posX + "," + posY + "," + posZ + "$");
 		sensors_event_t accelerometerData;
 		bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
-		//Serial.println(printEvent(&accelerometerData));
-	  Serial.println(accel, DEC); 
+		Serial.print(printEvent(&accelerometerData));
+		Serial.print("$");
+	  // Serial.println(accel, DEC); 
 	  
 
 	  /** This takes data from the enviromental sensor and writes it to a file as well as printing it to the terminal
@@ -341,8 +347,8 @@ if(Serial.available() > 0){
 		{
 
 		  // TODO: There is a better way to do this with headers, but this will work for now
-		  sensorDataFile.print("currentEnvTime ,");
-		  sensorDataFile.print(currentEnvTime);
+		  // sensorDataFile.print("currentEnvTime ,");
+		  // sensorDataFile.print(currentEnvTime);
 		  sensorDataFile.print("envTemp ,");
 		  sensorDataFile.print(envTemp);
 		  sensorDataFile.print("envPressure ,");
@@ -358,13 +364,16 @@ if(Serial.available() > 0){
 
 		// Serial.println("Current time between Environmental sensor update");
 		// Serial.println(currentEnvTime);
-		Serial.println(" Celsius");
-		Serial.println(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
-		Serial.println("Pressure");
-		Serial.println(envPressure); // TODO: This is in HPA. Do we want that?
-		Serial.println("Altitude:");
-		Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
-		Serial.println(" meters");
+		// Serial.println(" Celsius");
+		// Serial.println(envTemp); // TODO: This is in celsius! Do we want to have this in Fahrenheit?
+		// Serial.println("Pressure");
+		// Serial.println(envPressure); // TODO: This is in HPA. Do we want that?
+		// Serial.println("Altitude:");
+		// Serial.println(envAltitude); // TODO: This is in meters. Determine if we want to use this for units, or change to something else
+		// Serial.println(" meters");
+		
+		Serial.print(envTemp + "," + envPressure + "," + envAltitude);
+		
 		digitalWrite(LED_BUILTIN, LOW);	
   }
 }
