@@ -37,7 +37,7 @@ Adafruit_BMP3XX bmp;
 unsigned long previousSensorUpdate = 0;
 unsigned long lastSensorUpdate = 0;
 // Update the sensor values and write to the SD card every 3 seconds
-long sensorUpdateInterval = 3000;
+long sensorUpdateInterval = 500;
 
 // Declare vars for environmental sensor in preparation of writing to file
 double envTemp = 0.0;
@@ -80,6 +80,7 @@ Servo endEffectorGrabServo;
 String motorAssignment;
 String motorSpeedAssignmentUnfiltered;
 int motorSpeedAssignment;
+String concatenatedString;
 
 void setup()
 {
@@ -284,7 +285,7 @@ if(Serial.available() > 0){
       bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
      // sensorDataFile.print(printEvent(&accelerometerData));
 		  sensorDataFile.println(accel, DEC);
-    
+      
 
 
 		  sensorDataFile.close();
@@ -307,16 +308,30 @@ if(Serial.available() > 0){
 		//Serial.println(printEvent(&accelerometerData));
 		
 		//Serial.print("$");
-		Serial.print(posX);
-		Serial.print(",");
-		Serial.print(posY);
-		Serial.print(",");
-		Serial.print(posZ);
-    Serial.print("$");
+		
+		
+		concatenatedString.concat(posX);
+		concatenatedString.concat(",");
+		concatenatedString.concat(posY);
+		concatenatedString.concat(",");
+		concatenatedString.concat(posZ);
+		concatenatedString.concat(",");
+    concatenatedString.concat("$");
 		sensors_event_t accelerometerData;
 		bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
-		Serial.print(printEvent(&accelerometerData));
-		Serial.print("$");
+		concatenatedString.concat(printEvent(&accelerometerData));
+		concatenatedString.concat("$");
+		
+		// Serial.print(posX);
+		// Serial.print(",");
+		// Serial.print(posY);
+		// Serial.print(",");
+		// Serial.print(posZ);
+    // Serial.print("$");
+		// sensors_event_t accelerometerData;
+		// bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+		// Serial.print(printEvent(&accelerometerData));
+		// Serial.print("$");
 	  // Serial.println(accel, DEC); 
 	  
 
@@ -378,11 +393,20 @@ if(Serial.available() > 0){
 		// Serial.println(" meters");
 		
 		Serial.print(envTemp);
-		Serial.print(",");
-		Serial.print(envPressure);
-		Serial.print(",");
-		Serial.print(envAltitude);
-    Serial.print("$");
+		concatenatedString.concat(envTemp);
+		concatenatedString.concat(",");
+		concatenatedString.concat(envPressure);
+		concatenatedString.concat(",");
+		concatenatedString.concat(envAltitude);
+		// concatenatedString.concat("$");
+		// Serial.print(",");
+		// Serial.print(envPressure);
+		// Serial.print(",");
+		// Serial.print(envAltitude);
+		// Serial.print("$");
+		
+		Serial.println(concatenatedString);
+    concatenatedString = "";
 		
 		digitalWrite(LED_BUILTIN, LOW);	
   }
@@ -408,5 +432,5 @@ String printEvent(sensors_event_t* event) {
     y = event->acceleration.y;
     z = event->acceleration.z;
   }
-  return String(x)+String(y)+String(z);  
+  return String(x)+","+String(y) + ","+String(z);  
 }
